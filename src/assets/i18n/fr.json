@@ -1,0 +1,56 @@
+{
+  "home": {
+    "title": "Formulaire de vente pour particuliers",
+
+    "type": "Type de transaction",
+    "dco": "Vente directe",
+    "cons": "Depot vente",
+    "fname": "Prenom",
+    "lname": "Nom",
+    "model": "Modele (1 seul item par ligne)",
+    "addmodel": "Ajouter un autre item",
+    "price": "Prix (que des NOMBRES)",
+    "priceeur": "Prix (en euro)",
+    "payment": "Methode de reglement",
+    "id": "Numero de carte d'identite",
+    "certif1": "En acceptant les Conditions generales de vente, je certifie que ce produit est authentique, qu’il n'a pas été volé, escroqué, emprunté. Je me tiens responsable de l’authenticité, de la conformité, de la provenance et que l’objet ne comporte pas de défaut.",
+    "certif2":"Je soussigné atteste sur l’honneur la vente de cet objet et la véracité de cette déclaration et certifie que j'ai plus de 18 ans.",
+    "certif3":"",
+    "send": "Envoyer",
+    "banktransf": "Virement",
+    "other": "Autre",
+    "liq": "Especes",
+    "succes": "Formulaire envoye avec succes.",
+    "fail": "Echec de l'envoi. Reessayez ou contactez nous.",
+    "mail": "(Recommandé) Pour rester informé des sorties et des promotions, entrez votre email",
+    "idtype": "Type de carte",
+    "idnat": "Nationalite de la carte d'indentite",
+    "passport": "Passeport",
+    "idcard": "Card Nationale d'indentite",
+    "driverlicence": "Permis de conduire",
+    "mailppl": "Email lie au compte Paypal . Le payment sera envoye sur cet email, soyez attentif aux erreurs",
+    "beneficiaire": "Beneficiaire (Nom Complet)",
+    "iban": "Iban",
+    "idExp": "(Obligatoire car nous sommes une societe / Si l'id est incorrect la vente ne pourra pas avoir lieu)",
+    "top-text": "Toutes les informations sont strictement confidentielles. Si l’une des informations (nom, numero d'identité, ect…) est fausse nous nous réservons le droit d’annuler la vente.",
+    "cheque": "Cheque",
+    "bottom-text-1":" Ceci est un contrat de vente entre vous et la société ROOM GROUP SAS. Des détails sur la société sont disponible sur ",
+    "bottom-text-2":" et les conditions de vente ",
+    "bottom-link": "ici",
+    "quantity": "Quantité",
+    "fillform": "Vous devez remplir correctement tout les champs du formulaire avant de pouvoir nous l'envoyer.",
+    "infos": {
+      "seller": "Vendeur",
+      "payment": "Paiement",
+      "items": "Produit"
+
+    },
+    "accept": "Je soussigné atteste sur l’honneur la vente de cet objet et la véracité de cette déclaration. J'accepte sans réserves les ",
+    "terms": "conditions générales d'achat",
+    "color": "Couleur",
+    "size": "Taille"
+
+
+
+  }
+}

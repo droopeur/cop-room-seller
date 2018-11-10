@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">CopRoom</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/admin">Fiches</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/generator">Generateur</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+<div class="container">
+  <form style="margin-top:20px" (submit)="generateLink()">
+    <div class="form-row">
+    <div class="form-group col-lg-7">
+      <label >Nom de l'item</label>
+      <input type="text" class="form-control"  placeholder="Enter item" [(ngModel)]="item"  name="item">
+      <small id="emailHelp" class="form-text text-muted">Utiliser le nom du shopify</small>
+    </div>
+    <div class="form-group col-lg-3">
+      <label >Taille</label>
+      <input type="text" class="form-control" placeholder="Taille" [(ngModel)]="size" name="size">
+    </div>
+      <div class="form-group col-lg-3">
+        <label >Prix (nombres)</label>
+        <input type="text" class="form-control" placeholder="Prix" [(ngModel)]="prix" name="prix">
+      </div>
+    </div>
+    <div class="form-group">
+      <label >Numero de commande</label>
+      <input type="text" class="form-control" placeholder="Order Number" [(ngModel)]="order"  name="order">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <h6 style="margin-top:20px">Link :</h6>
+  <input type="text" disabled class="form-control" placeholder="link for client" [(ngModel)]="link_generated"  name="link" (click)="copyMessage(link_generated)">
+  <div class="alert alert-success" role="alert" *ngIf="alert" style="margin-top:20px">
+    Le lien a ete copie dans le presse-papier !
+  </div>
+</div>

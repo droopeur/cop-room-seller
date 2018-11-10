@@ -1,0 +1,178 @@
+input {
+  border:0 !important;
+  border-bottom: 2px solid #eee !important;
+
+  border-radius: 0px !important;
+}
+
+label {
+  font-size: 0.8rem;
+
+  color: #84848484;
+}
+
+.formStep {
+
+  box-shadow: 0px 0px 50px rgba(100,100,100,.1);
+
+  padding: 30px;
+
+  padding-top: 40px;
+
+  margin: 40px 0px;
+
+  position: relative;
+}
+
+.formStepLabel {
+  position: absolute;
+
+  top: -20px;
+
+  padding: 10px 20px;
+
+  background-color: #B9946A;
+
+
+  color: white;
+
+  font-family: "Helvetica Neue";
+
+  font-weight: 300;
+}
+
+.btn {
+  border: 1px solid #B9946A;
+
+  border-radius: 0px;
+
+  background-color: white;
+
+  color: #B9946A;
+
+  transition: 0.3s ease-in-out;
+}
+
+.btn:hover{
+  background-color:  #B9946A;
+
+  color: white;
+
+}
+
+label.form-check-label{
+  color:black !important;
+  font-size: 1em;
+}
+
+input.ng-valid {
+  border-left: 3px solid #00e461 !important;
+}
+
+input.ng-touched.ng-invalid{
+  border-left: 3px solid #9a0a07 !important;
+
+}
+
+select{
+  border-radius: 0px!important;
+  border:0;
+}
+
+.footer{
+  background-color: white;
+}
+
+.btn:disabled{
+  opacity: 0.3;
+}
+
+.btn:disabled:hover{
+  background-color:  white;
+
+  color: #B9946A;
+
+}
+
+.unfilled {
+  margin-left: 2rem;
+
+  color: #9a0a07;
+}
+
+.sender {display:flex}
+
+svg {
+  width: 100px;
+  display: block;
+  margin: 40px auto 0;
+}
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+}
+.path.circle {
+  -webkit-animation: dash 2s ease-in-out;
+  animation: dash 2s ease-in-out;
+}
+.path.line {
+  stroke-dashoffset: 1000;
+  -webkit-animation: dash  2s 0.6s ease-in-out forwards;
+  animation: dash 2s 0.6s ease-in-out forwards;
+}
+.path.check {
+  stroke-dashoffset: -100;
+  -webkit-animation: dash-check  2s 0.6s ease-in-out forwards;
+  animation: dash-check 2s 0.6s ease-in-out forwards;
+}
+
+@-webkit-keyframes dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@-webkit-keyframes dash-check {
+  0% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: 900;
+  }
+}
+@keyframes dash-check {
+  0% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: 900;
+  }
+}
+
+.btn-full {
+  color:white;
+  background-color: #B9946A;
+}
+
+.btn-full:hover {
+  color:white;
+  background-color: #725b41;
+  border-color: #725b41;
+
+}
+
+.results-wrapper {
+  min-height: 100vh;
+}
+
+

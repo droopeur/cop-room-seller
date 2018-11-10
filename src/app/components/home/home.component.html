@@ -1,0 +1,183 @@
+<br/>
+<div class="text-center">
+  <img [src]="'https://cdn.shopify.com/s/files/1/0006/4353/0817/files/logo-coproom.png?13943282855765023674'" class="rounded" alt="CopRoom" style="max-height:100px">
+  <br/>
+<div class="container">
+<h4 style="color:#848484;font-weight:bold;padding-top: 10px">{{'home.title'| translate}}</h4>
+  <p style="text-align: left">{{'home.top-text' | translate }}</p>
+</div>
+</div>
+
+<br/>
+<div class="container">
+
+  <form #addFicheForm="ngForm">
+
+    <div class="formStep">
+      <div class="formStepLabel">{{'home.infos.items' | translate}}</div>
+      <div class="form-row text-center">
+        <div class="form-group">
+          <label for="inputtype">{{'home.type' | translate}}</label>
+          <select id="inputtype" class="form-control" [(ngModel)]="fiche['type']" #type="ngModel" name="type" required>
+            <option selected value="direct cash out">{{'home.dco' | translate}}</option>
+            <option value="consignment">{{'home.cons' | translate}}</option>
+
+
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row" *ngFor="let model of modele, let i=index;trackBy:trackByIdx">
+      <div class="form-group col-md-4">
+      <label for="inputmodele{{i}}">{{'home.model' | translate}}</label>
+      <input type="text" class="form-control" [id]="'inputmodele'+i" placeholder="{{'home.model' | translate}}" [(ngModel)]="modele[i].modele"  name="model{{i}}" required [disabled]="disabled">
+      </div>
+
+        <div class="form-group col-md-3">
+          <label for="inputmodele{{i}}">{{'home.size' | translate}}</label>
+          <input  #type="ngModel" class="form-control" [id]="'inputmodele'+i"  [(ngModel)]="modele[i].size"  name="size{{i}}" [disabled]="disabled" required style="border-radius:0 !important; border:2px solid #eee !important">
+            <!--<option selected value="No size">One size/ No size</option>-->
+
+            <!--<option value="XS">XS</option>-->
+            <!--<option value="S">S</option>-->
+            <!--<option value="M">M</option>-->
+            <!--<option value="L">L</option>-->
+            <!--<option value="XL">XL</option>-->
+            <!--<option value="XL">XXL</option>-->
+
+            <!--<option value="4">4</option>-->
+            <!--<option value="4.5">4.5</option>-->
+            <!--<option value="5">5</option>-->
+            <!--<option value="5.5">5.5</option>-->
+            <!--<option value="6">6</option>-->
+            <!--<option value="6.5">6.5</option>-->
+            <!--<option value="7">7</option>-->
+            <!--<option value="7.5">7.5</option>-->
+            <!--<option value="8">8</option>-->
+            <!--<option value="8.5">8.5</option>-->
+            <!--<option value="9">9</option>-->
+            <!--<option value="9.5">9.5</option>-->
+            <!--<option value="10">10</option>-->
+            <!--<option value="10.5">10.5</option>-->
+            <!--<option value="11">11</option>-->
+            <!--<option value="11.5">11.5</option>-->
+            <!--<option value="12">12</option>-->
+            <!--<option value="12.5">12.5</option>-->
+            <!--<option value="13">13</option>-->
+            <!--<option value="13.5">13.5</option>-->
+            <!--<option value="14">14</option>-->
+
+
+
+
+
+          <!--</select>-->
+        </div>
+
+      <div class="form-group col-md-3">
+        <label for="inputprix">{{'home.price' | translate}}</label>
+        <input type="number" class="form-control" [id]="'inputprix'+i" placeholder="{{'home.priceeur' | translate}}" [(ngModel)]="modele[i].prix" name="price{{i}}" required [disabled]="disabled" >
+      </div>
+      <div class="form-group col-md-1">
+        <label for="inputprix">{{'home.quantity' | translate}}<br/></label>
+        <input type="number" class="form-control" [id]="'inputquant'+i" placeholder="{{'home.quantity' | translate}}" [(ngModel)]="modele[i].quantity" name="quantity{{i}}" [disabled]="disabled" required>
+      </div>
+    </div>
+    <button class="btn btn-info" (click)="modele.push({})" [disabled]="disabled"> {{'home.addmodel' | translate}}</button>
+
+    </div>
+    <div class="formStep">
+      <div class="formStepLabel">{{'home.infos.payment' | translate}}</div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputpayement">{{'home.payment' | translate}}</label>
+        <select id="inputpayement" class="form-control" [(ngModel)]="fiche['payement']" #payement="ngModel" name="payement" required>
+          <option selected value="Paypal">Paypal</option>
+          <option value="Virement">{{'home.banktransf' | translate}}</option>
+          <!--<option value="Cheque">{{'home.cheque' | translate}}</option>-->
+
+
+        </select>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="fiche['payement']=='Paypal'">
+      <label for="inputmodele">{{'home.mailppl' | translate}}</label>
+      <input type="text" class="form-control" id="mailppl" placeholder="E-mail PayPal" [(ngModel)]="fiche['mail_paypal']"  name="mailppl"  required>
+    </div>
+    <div class="form-group" *ngIf="fiche['payement']=='Virement'">
+      <label >{{'home.iban' | translate}}</label>
+      <input type="text" class="form-control" id="iban" placeholder="Iban" [(ngModel)]="fiche['iban']"  name="iban"  required>
+      <label >{{'home.beneficiaire' | translate}}</label>
+      <input type="text" class="form-control" id="beneficiaire" placeholder="{{'home.beneficiaire' | translate}}" [(ngModel)]="fiche['beneficiaire']"  name="benef"  required>
+    </div>
+    </div>
+    <div class="formStep">
+      <div class="formStepLabel">{{'home.infos.seller' | translate}}</div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputprenom">{{'home.fname' | translate}}</label>
+          <input type="text" class="form-control" id="inputprenom" placeholder="{{'home.fname' | translate}}" [(ngModel)]="fiche['prenom']" #prenom="ngModel" name="prenom" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputnom">{{'home.lname' | translate}}</label>
+          <input type="text" class="form-control" id="inputnom" placeholder="{{'home.lname' | translate}}" [(ngModel)]="fiche['nom']" #nom="ngModel" name="nom" required>
+        </div>
+      </div>
+      <div class="form-row">
+
+        <div class="form-group col-md-12">
+          <label for="inputmodele">{{'home.id' | translate}} {{'home.idExp' | translate}}</label>
+          <input type="text" class="form-control" id="id" placeholder="{{'home.id' | translate}}" [(ngModel)]="fiche['id']" #id="ngModel" name="id" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label for="inputmodele">{{'home.idtype' | translate}}<br/></label>
+          <select id="inputidtype" class="form-control" [(ngModel)]="fiche['id_type']" #idtype="ngModel" name="idtype" required>
+            <option value="Passeport">{{'home.passport' | translate}}</option>
+            <option value="Permis de conduire">{{'home.driverlicence' | translate}}</option>
+            <option value="Carte Nationale d'identite">{{'home.idcard' | translate}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-5">
+          <label for="inputmodele">{{'home.idnat' | translate}}<br/></label>
+          <input type="text" class="form-control" id="idnat" placeholder="{{'home.idnat' | translate}}" [(ngModel)]="fiche['id_nat']" #idnat="ngModel" name="idnat" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputmodele">{{'home.mail' | translate}}</label>
+        <input type="text" class="form-control" id="mail" placeholder="E-mail" [(ngModel)]="fiche['mail']"  name="mail" >
+      </div>
+    </div>
+
+    <div class="formStep">
+    <div class="form-group">
+      <input class="form-check-input" type="checkbox" id="defaultCheck1" [(ngModel)]="fiche['valid']" #valid="ngModel" name="valid" />
+      <label class="form-check-label" for="defaultCheck1">
+        <p class="c3"><span class="c4">{{'home.accept' | translate}} <a routerLink="/terms">{{'home.terms' |translate}}</a>. </span>
+        </p>
+        <p class="c1"><span class="c4"></span></p>
+        <h5 class="c3"><span class="c17">{{fiche['prenom']}} {{fiche['nom']}}</span></h5></label>
+    </div>
+    </div>
+  </form>
+  <div class="alert alert-success" *ngIf="success"> {{'home.succes' | translate}}</div>
+  <div class="alert alert-warning" *ngIf="fail">{{'home.fail' | translate}}</div>
+  <div class="sender">
+  <button class="btn btn-danger" [disabled]="!fiche['valid'] || !addFicheForm.form.valid || onWait" (click)="send(fiche)"> {{'home.send' | translate}}</button>
+    <p class="unfilled" *ngIf="!fiche['valid'] || !addFicheForm.form.valid || onWait">{{'home.fillform' | translate}}</p>
+  </div>
+<br/>
+</div>
+<div class="footer">
+<hr/>
+<p style="font-size:10px;margin-left: 10px;margin-right: 10px">
+  {{'home.bottom-text-1' | translate}}<a href="cop-room.com">www.cop-room.com</a> {{'home.bottom-text-2' | translate}} <a href=" https://www.cop-room.com/pages/terms-of-purchase">{{'home.bottom-link' | translate}}</a>
+
+</p>
+</div>
+
+<ngx-smart-modal #myModal identifier="myModal" >
+
+
+</ngx-smart-modal>

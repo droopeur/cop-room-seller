@@ -1,0 +1,106 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">CopRoom</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/admin">Fiches</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/generator">Generateur</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/invoices">Invoice generator</a>
+      </li><li class="nav-item">
+      <a class="nav-link" routerLink="/invoices/list">Invoice List</a>
+    </li>
+    </ul>
+  </div>
+</nav>
+<div class="container">
+
+  <form #addFicheForm="ngForm">
+
+    <div class="formStep">
+      <div class="formStepLabel">Facture</div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="number">Invoice number (BTxxx)</label>
+          <input id="number" type="number" class="form-control" [(ngModel)]="invoice['number']" #number="ngModel" name="number" >
+
+        </div>
+      </div>
+      <div class="form-row ">
+        <div class="form-group col-md-8 ">
+          <label for="nme">Infos Client</label>
+          <textarea rows="5" id="nme" class="form-control" [(ngModel)]="invoice['client']" #nme="ngModel" name="nme" required>
+          </textarea>
+        <!--</div>-->
+        <!--<div class="form-group col-md-4 ">-->
+          <!--<label for="vat">VAT</label>-->
+          <!--<input id="vat" class="form-control" [(ngModel)]="invoice['vat']" #vat="ngModel" name="vat" >-->
+
+        <!--</div>-->
+      <!--</div>-->
+<!--<div class="form-group">-->
+  <!--<label for="inputaddress">Adresse</label>-->
+  <!--<input id="inputaddress" class="form-control" [(ngModel)]="invoice['address']" #address="ngModel" name="address" required>-->
+<!--</div>-->
+      <!--<div class="form-row ">-->
+        <!--<div class="form-group col-md-3 ">-->
+          <!--<label for="zip">Zip</label>-->
+          <!--<input id="zip" class="form-control" [(ngModel)]="invoice['zip']" #zip="ngModel" name="zip" required>-->
+
+        <!--</div>-->
+        <!--<div class="form-group col-md-4 ">-->
+          <!--<label for="city">City</label>-->
+          <!--<input id="city" class="form-control" type="text" [(ngModel)]="invoice['city']" #city="ngModel" name="city" required>-->
+
+        <!--</div>-->
+        <!--<div class="form-group col-md-5 ">-->
+          <!--<label for="country">Country</label>-->
+          <!--<input id="country" class="form-control" type="text" [(ngModel)]="invoice['country']" #country="ngModel" name="country" >-->
+
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+        <!--<label for="phone">Phone</label>-->
+        <!--<input id="phone" type="number" class="form-control" [(ngModel)]="invoice['phone']" #phone="ngModel" name="phone" >-->
+
+      </div>
+    </div>
+
+
+    <div class="form-row" *ngFor="let model of modele, let i=index;">
+      <div class="form-group col-md-4">
+        <label for="inputmodele{{i}}">Modele</label>
+        <input type="text" class="form-control" [id]="'inputmodele'+i" placeholder="Modele" [(ngModel)]="modele[i].modele"  name="model{{i}}" required [disabled]="disabled">
+      </div>
+
+      <div class="form-group col-md-3">
+        <label for="inputmodele{{i}}">Size</label>
+        <input  #type="ngModel" class="form-control" [id]="'inputmodele'+i"  [(ngModel)]="modele[i]['size']"  name="size{{i}}" [disabled]="disabled" required style="border-radius:0 !important; border:2px solid #eee !important">
+      </div>
+
+      <div class="form-group col-md-3">
+        <label for="inputprix">Prix</label>
+        <input type="number" class="form-control" [id]="'inputprix'+i" placeholder="Prix" [(ngModel)]="modele[i].prix" name="price{{i}}" required [disabled]="disabled" >
+      </div>
+      <div class="form-group col-md-1">
+        <label for="inputprix">Quantity<br/></label>
+        <input type="number" class="form-control" [id]="'inputquant'+i" placeholder="{{'home.quantity' | translate}}" [(ngModel)]="modele[i].quantity" name="quantity{{i}}" [disabled]="disabled" required>
+      </div>
+    </div>
+    <button class="btn btn-info" (click)="modele.push({})" > Ajouter un item</button>
+    </div>
+
+  </form>
+  <div class="alert alert-success" *ngIf="success">Invoice generated</div>
+  <!--<div class="alert alert-warning" *ngIf="fail">{{'home.fail' | translate}}</div>-->
+  <div class="sender">
+    <button class="btn btn-danger" [disabled]="!addFicheForm.form.valid || this.onSend" (click)="send()">Generate invoice</button>
+  </div>
+  <br/>
+</div>
