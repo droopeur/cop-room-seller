@@ -1,0 +1,13 @@
+.big {
+  font-size: x-large;
+}
+
+.card-an {
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.card-an:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0,0.15);
+  transform: scale(1.05);
+}

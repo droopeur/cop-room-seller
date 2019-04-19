@@ -1,47 +1,165 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">CopRoom</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/admin">Fiches</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/generator">Generateur</a>
-      </li>
 
-    </ul>
+<div class="container" #cont id="cont">
+    <div class="card " id="link" >
+      <div class="card-body">
+        <h4 style="cursor:pointer" (click)="copyMessage(link_generated)" class="box-title"><i class="fas fa-paste"></i> Link :</h4>
+        <input class="form-control" id="copy" [(ngModel)]="link_generated" name="ngmodel" >
+        <div class="alert alert-success" role="alert" *ngIf="alert" style="margin-top:20px">
+          Le lien a ete copie dans le presse-papier !
+        </div>
+      </div> <!-- /.table-stats -->
   </div>
-</nav>
-<div class="container">
-  <form style="margin-top:20px" (submit)="generateLink()">
-    <div class="form-row">
-    <div class="form-group col-lg-7">
-      <label >Nom de l'item</label>
-      <input type="text" class="form-control"  placeholder="Enter item" [(ngModel)]="item"  name="item">
-      <small id="emailHelp" class="form-text text-muted">Utiliser le nom du shopify</small>
+  <form style="margin-top:20px" >
+    <div class="card">
+      <div class="card-body">
+
+    <div class="col-md-12" *ngFor="let test of items; let i=index">
+
+          <form style="width:100%">
+
+          <h4 class="box-title">Item {{i+1}}</h4>
+          <div class="row">
+          <div class="form-group col-lg-3">
+            <label >Nom de l'item</label>
+            <input type="text"  list="testlist" class="form-control"  placeholder="Enter item" [value]="items[i]['modele']" [(ngModel)]="items[i]['modele']"  name="item" (ngModelChange)="search($event, i)">
+            <ul class="dataList" [hidden]="items[i]['showalgo']===true" >
+              <li *ngFor="let opt of datalist" (click)="items[i]['modele']=opt.title;items[i]['showalgo'] = true;items[i]['image']=opt.image;">
+                {{opt.title}}
+              </li>
+            </ul>
+            <!--<datalist id="testlist" *ngIf="datalist[0] && datalist[0].title != items[i]['modele']" required>-->
+              <!--<option *ngFor="let opt of datalist"  (click)="items[i]['modele']=opt.title;items[i]['image']=opt.image;this.showItemsAlgolia = true">{{opt.title}}</option>-->
+            <!--</datalist>-->
+            <small id="emailHelp" class="form-text text-muted">Utiliser le nom du shopify</small>
+          </div>
+          <div class="form-group col-lg-1">
+            <label >Taille </label>
+
+              <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="test['size']"  name="size" required>
+                <optgroup label="Sneakers">
+
+                <option *ngFor="let size of snkrsSizes" [value]="size + 'US'">{{size + 'US'}}</option>
+              </optgroup>
+                <optgroup label="Clothes">
+
+                  <option *ngFor="let size of clothesSizes" [value]="size">{{size}}</option>
+                </optgroup>
+                <optgroup label="No size / One size">
+
+                  <option  [value]="'OS'">OS</option>
+                </optgroup>
+              </select>
+            <small class="form-text text-muted">(si pas de taille mettre “OS” : One size)</small>
+
+            <!--<input type="text" class="form-control" placeholder="Taille"  name="size" required>-->
+          </div>
+            <div class="form-group col-lg-1">
+              <label >Quantite</label>
+              <input type="text" class="form-control" placeholder="Quantite" [(ngModel)]="test['qty']" name="qty" required>
+              <small id="emailHelp" class="form-text text-muted">Nombres only</small>
+
+            </div>
+
+            <div class="form-group col-lg-2">
+            <label >Prix</label>
+            <input type="text" class="form-control" placeholder="Prix" [(ngModel)]="test['price']" name="prix" required>
+            <small id="emailHelp" class="form-text text-muted">Nombres only</small>
+
+          </div>
+            <div class="col-lg-2">
+              <label >Commande</label>
+              <input type="text" class="form-control" placeholder="Order Number" [(ngModel)]="test['order_number']"  name="order" [disabled]="idem && i>0" required>
+              <small id="emailHelp" class="form-text text-muted">Numero de commande</small>
+
+            </div>
+
+            <div class="form-group col-lg-1">
+              <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+              <button class="btn btn-info" style="margin:auto" (click)="duplicate(test)"><i class="fas fa-copy"></i></button>
+
+              <!--<input type="text" class="form-control" placeholder="Taille"  name="size" required>-->
+            </div>
+            <ng-template #cross>
+              <div class="col-lg-1" style="text-align: center">
+                <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+                <i class="far fa-times-circle" (click)="items.splice(i,1)" style="    font-size: xx-large;
+    margin-left: auto;    margin-right: auto;
+
+    color: grey;"></i>
+              </div>
+            </ng-template>
+            <div class="col-lg-1" style="text-align: left;" *ngIf="i==0 && items.length>1">
+              <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+              <i class="far fa-times-circle" (click)="items.splice(i,1)" style="    font-size: xx-large;
+    margin-left: auto;    margin-right: auto;
+    color: grey;"></i>
+            </div>
+            <div class="col-lg-1" *ngIf="i==0; else cross">
+              <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+              <label class="switch">
+                <input type="checkbox" placeholder="Order Number" [(ngModel)]="idem"  name="label" (change)="switchIdem()">
+                <span class="slider round"></span>
+              </label>
+              <small id="emailHelp" class="form-text text-muted">Order number identique pour tous les items</small>
+
+            </div>
+          </div>
+          </form>
+
+      </div>
+       <!-- /.table-stats -->
     </div>
-    <div class="form-group col-lg-3">
-      <label >Taille</label>
-      <input type="text" class="form-control" placeholder="Taille" [(ngModel)]="size" name="size">
-    </div>
-      <div class="form-group col-lg-3">
-        <label >Prix (nombres)</label>
-        <input type="text" class="form-control" placeholder="Prix" [(ngModel)]="prix" name="prix">
+      <div class="col-md-12" >
+        <div class="card-body">
+
+        <p>Ship price Eu: {{shipPriceFr()}}<br/>
+          Ship price Fr: {{shipPriceEu()}}</p></div></div>
+      <div class="flex col-md-12" >
+        <a tabindex class="" type="" style="margin-left:auto;margin-right: 20px;" (click)="addItem()"><i class="fas fa-plus-circle" style="margin-right:5px"></i>Ajouter un autre item</a>
       </div>
     </div>
-    <div class="form-group">
-      <label >Numero de commande</label>
-      <input type="text" class="form-control" placeholder="Order Number" [(ngModel)]="order"  name="order">
+    <div class="col-md-12" >
+      <div class="card ">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <h4 class="box-title">Type de transaction</h4>
+              <select id="inputpayement" class="form-control" [(ngModel)]="transaction" #test="ngModel"
+                      name="payement2" required>
+                <option selected value="gift">Gift a la reception</option>
+                <option value="invoice">Invoice paypal</option>
+                <option value="dropoff" (click)="allow_label=false">meetup</option>
+              </select>
+            </div>
+            <div class="col-lg-3" *ngIf="transaction != 'dropoff'">
+              <h4 class="box-title">Autoriser la generation de label</h4>
+              <label class="switch">
+                <input type="checkbox" placeholder="Order Number" [(ngModel)]="allow_label"  name="label">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="col-lg-3"  *ngIf="transaction == 'dropoff'">
+              <h4 class="box-title">Autoriser les especes</h4>
+              <label class="switch">
+                <input type="checkbox" placeholder="Order Number" [value]="allow_cash" (change)="allow_cash = ! allow_cash" name="label">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+
+
+        </div> <!-- /.table-stats -->
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <p style="color:red; text-align:center" *ngIf="!checkValid()">Entre toutes les informations necessaires pour chaque item avant de pouvoir envoyer la fiche</p>
+    <div class="flex col-md-12" style="margin-bottom: 0;padding-bottom:20px">
+      <button style="margin-left:auto;font-size: x-large;margin-right:auto" type="button" class="btn btn-success badge-complete" (click)="generateLink()" [disabled]="onGeneration || !checkValid()">
+        <ng-container *ngIf="!onGeneration; else generation">Generer le lien de la fiche</ng-container>
+        <ng-template #generation>
+          <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </ng-template></button>
+    </div>
   </form>
 
-  <h6 style="margin-top:20px">Link :</h6>
-  <input type="text" disabled class="form-control" placeholder="link for client" [(ngModel)]="link_generated"  name="link" (click)="copyMessage(link_generated)">
-  <div class="alert alert-success" role="alert" *ngIf="alert" style="margin-top:20px">
-    Le lien a ete copie dans le presse-papier !
-  </div>
+
 </div>

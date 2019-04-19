@@ -1,0 +1,29 @@
+.row.row-tabs {
+  background-color: white;
+  border-radius: 5px;
+  padding: 0px 5px;
+  margin:0;
+  margin-bottom:20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+
+}
+
+.tab.active {
+  background: linear-gradient(90deg,#a7d5f5,#8abdeb) !important;
+  color: white;
+}
+.tab {
+  font-size: large;
+  padding: 5px 10px;
+  font-weight: 600;
+  text-align: center;
+  margin: 5px 0px;
+  border-radius: 5px;
+  color: #868e96;
+  line-height: 2;
+}
+
+*:focus {
+  outline: none;
+
+}

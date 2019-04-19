@@ -1,11 +1,324 @@
 /* You can add global styles to this file, and also import other style files */
+$transition-duration: 200ms;
+
 @import "~ngx-smart-modal/ngx-smart-modal";
-
-
-.nsm-content {
-  border-radius:0 !important
-}
+@import "assets/theme.scss";
 
 .nsm-dialog {
   max-width: 720px;
 }
+
+.card {
+  border:none !important
+}
+
+mfPaginator {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .hidemob {
+    display: none !important;
+  }
+}
+@media (min-width: 375px) and (max-width: 767px)  {
+  .hidemob {
+    display:none!important;
+  }
+}
+
+.left-panel-2 {
+  background: #fff;
+  height: 100vh;
+  padding: 0;
+  vertical-align: top;
+  max-width: 260px;
+  -webkit-box-shadow: 1px 0 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 1px 0 20px rgba(0, 0, 0, 0.08);
+  left: 0;
+  bottom: 0;
+  top: 55px !important;
+  z-index: 999;
+  position: fixed;
+
+}
+
+.navbar-collapse {
+  align-items: flex-start!important;
+}
+
+.navbar {
+  align-items: baseline  !important;
+}
+
+.collapse:not(.show) {
+   display: inherit !important;
+}
+
+.table-stats table td {
+  color: #495057;
+}
+
+.table-stats table th {
+  color:black;
+  font-weight: bold;
+  font-size: medium;
+}
+
+.ng-sidebar {
+  z-index: 100!important;
+}
+.nsm-content {
+  border-radius: 10px !important;
+}
+
+.nsm-body > h1 {
+  padding-top: 0px!important;
+}
+.modal-footer {
+  padding: 0 !important;
+  border:0 !important;
+  padding-top:0.5em !important;
+  justify-content: space-between !important;
+}
+
+.page-header .breadcrumb {
+  margin: 0px;
+  padding: 12.5px 0;
+  background: #fff;
+  text-transform: capitalize;
+  font-size: large;
+  text-transform: uppercase;
+}
+
+.flex {
+  display: flex;
+}
+
+
+.badge {
+  display: inline-block;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;
+}
+.badge {
+  color: white;
+  padding: 10px;
+  text-transform: uppercase;
+  font-weight: normal;
+  cursor: pointer;
+}
+/*.badge-complete {*/
+/*background: linear-gradient(90deg,#f6cb96,#f4b57e);*/
+/*box-shadow: 2px 2px 20px 0px rgba(244,181,126,0.5);*/
+/*}*/
+
+.badge-all {
+  background: linear-gradient(90deg,#aeb3f5,#ab9cef);
+  box-shadow: 2px 2px 20px 0px rgba(167,143,236,0.5);
+
+}
+
+.badge-pending {
+  background: linear-gradient(90deg,#a7d5f5,#8abdeb);
+  box-shadow: 2px 2px 20px 0px rgba(138,189,235,0.5);
+
+}
+.badge-pending.border {
+  border: 1px solid #a7d5f5 !important
+}
+.badge-pending.border:hover {
+  border: 1px solid #8abdeb !important
+
+}
+.badge-complete {
+  background: linear-gradient(90deg, #87e2b5,#73cbc6);
+  box-shadow: 2px 2px 20px 0px rgba(115,203,198,0.5);
+
+}
+
+
+.badge-alert {
+  background: linear-gradient(90deg,#edae9e,#e38a83);
+  box-shadow: 2px 2px 20px 0px rgba(227,138,131,0.5);
+
+}
+
+.order-table tr th {
+  background: white;
+}
+
+.order-table:after, .order-table:before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  height: 37px;
+  width: 10px;
+  background: transparent;
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+.nsm-content{
+  margin-top: 100px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom:0;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+}
+
+.dialing {
+  font-size: 0.8em !important;
+  /* margin: auto; */
+  /* padding-top: 1.3em !important; */
+  /* padding-bottom: 0.6em; */
+  vertical-align: middle !important;
+  border-right: 2px solid #e8e9ef !important;
+  text-align:center;
+}
+
+.dropdown-menu.show {
+  top: unset !important;
+}
+
+.dataList {
+  list-style: none;
+  border-radius: 5px;
+  box-shadow: 0 0.31rem 1.25rem rgba(0,0,0,.1);
+  position: absolute;
+  background: white;
+  z-index: 100;
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.dataList li {
+  font-size: 0.9em;
+  padding: 5px;
+  padding-left: 10px;
+  font-weight: 400;
+}
+
+.dataList li:hover {
+background: whitesmoke;
+}
+
+.btn.disabled, .btn:disabled {
+  opacity: 0.35 !important;
+}
+
+
+.loader {
+  width: 400px;
+  height: 40px;
+  background-color: #ddd;
+  top: 50%;
+  left: 50%;
+  margin: -40px -200px;
+  position: absolute;
+  border-radius: 100px;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.loader:after {
+  border-radius: 100px;
+  content: "";
+  position: absolute;
+  background-color: #fff;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  right: 360px;
+  animation-name: slide;
+  animation-duration: 2s;
+  animation-easing-function: linear;
+  animation-iteration-count: infinite;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slide {
+  0% {
+    right: 360px;
+    left: 2px;
+  }
+  5% {
+    left: 2px;
+  }
+  50% {
+    right: 2px;
+    left: 360px;
+  }
+  55% {
+    right: 2px;
+  }
+  100% {
+    right: 360px;
+    left: 2px;
+  }
+}
+
+.lds-facebook {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: auto;
+}
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 6px;
+  width: 13px;
+  background: black;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+
+}
+.lds-facebook div:nth-child(1) {
+  left: 6px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 26px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 45px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
+  0% {
+    top: 6px;
+    height: 51px;
+  }
+  50%, 100% {
+    top: 19px;
+    height: 26px;
+  }
+}
+
+.opacitor {
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.87);
+  padding: 5% 2%;
+  text-transform: uppercase;
+  color: #7acef8;
+  font-size: 30px;
+  font-weight: bolder;
+  font-family: 'Futura';
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900000;
+  display: flex;
+}
+
+

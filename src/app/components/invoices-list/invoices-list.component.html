@@ -1,188 +1,417 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">CopRoom</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/admin">Fiches</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/generator">Generateur</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/invoices">Invoice generator</a>
-      </li><li class="nav-item">
-      <a class="nav-link" routerLink="/invoices/list">Invoice List</a>
-    </li>
-    </ul>
-  </div>
-</nav>
-<div class="table-responsive">
-  <table class="table table-hover " [mfData]="invoiceList" #mf="mfDataTable" [mfRowsOnPage]="40">
-    <thead>
-    <tr>
-      <th scope="col">Del</th>
+<!--<lib-ngx-notification></lib-ngx-notification>-->
+{{TVA}}
+<div class="container">
+  <!--<button class="btn btn-alert" (click)="update2()">update</button>-->
+  <div class="add-btn"></div>
+  <div class="card">
+    <div class="row card-body" style="padding-right:0; padding-bottom:0">
+      <div class="col-lg-7">
+        <div class="input-group mb-3">
 
-      <th scope="col">
-        <mfDefaultSorter by="nom">Nom</mfDefaultSorter>
-      </th>
-      <th scope="col">
-        <mfDefaultSorter by="mail">Number</mfDefaultSorter>
-      </th>
-      <th scope="col">
-        <mfDefaultSorter by="date">Date</mfDefaultSorter>
-      </th>
-      <th scope="col">
-        <mfDefaultSorter by="type">Total</mfDefaultSorter>
-      </th>
-      <th scope="col"> Print</th>
-      <th scope="col"> Dl</th>
-      <th scope="col">
-        <mfDefaultSorter by="paid" >Paid</mfDefaultSorter>
-      </th>
-      <th scope="col">
-        <mfDefaultSorter by="police_number">note</mfDefaultSorter>
-      </th>
+          <i class="fas fa-search"></i> <input type="text" class="form-control" placeholder="Prenom nom item"
+                                               [(ngModel)]="searchInput"
+                                               (ngModelChange)="valueChange($event)" #search="ngModel" name="search">
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="input-group mb-2">
 
-    </tr>
-    </thead>
-    <tbody>
-    <ng-container *ngFor="let inv of mf.data">
-      <tr [class]="'table-row '+inv['paid']">
-        <td>
-          <button class="btn btn-sm btn-danger" (click)="delete(inv.objectID)"><i class="fas fa-trash"></i></button>
-        </td>
+          <input type="text" class="form-control" placeholder="Numero de facture" [(ngModel)]="searchOrderNbInput"
+                 (ngModelChange)="valueChangeRep($event)" #search="ngModel" name="search">
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="input-group mb-3">
 
-        <th scope="row" class="order-col">{{inv['client'][0]}}</th>
-        <td class="">TB{{inv.number}}</td>
+          <input type="text" class="form-control" placeholder="Note" [(ngModel)]="searchNotes"
+                 (ngModelChange)="valueChangeNote($event)" #searchNot="ngModel" name="searchNote">
+        </div>
+      </div>
+    </div>
+    <div class="row card-body" style="padding-top:0;padding-bottom: 0">
+      <div class="col-md-2" style="margin-bottom:10px">
 
-        <td>{{inv['date'] | date}}</td>
-        <td>{{inv['total']}}</td>
+        <div class="row">
 
-        <td>
-          <button class="btn btn-sm btn-info" (click)="assign(inv);printToCart(inv['type'], inv)"><i
-            class="fas fa-print"></i></button>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-info" (click)="downloadAsPDF(inv)"><i class="fas fa-download"></i></button>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-warning" (click)="markAsPaid(inv)"><i class="fas fa-money-check-alt"></i>
-          </button>
-        </td>
+          <div class="col-12" style="display: flex">
+            <i class="fas fa-filter"></i>
 
-        <td>
-          <form>
-            <div class="col-auto"><input [class]="'form-control orderNumb '+checkColorPolice(inv)"
-                                         placeholder="Notes" [(ngModel)]="inv['notes']" name="ngModel"
-                                         (change)="updatePoliceNumb(inv)"/></div>
+            <span [class]="'badge badge-all '+isSelected('all','none')"
+                  (click)="filter.type='none';filter.number='none';filter.payement = 'none';toDate = 'none'; fromDate = 'none' ; invoiceService.resetInvoices()">No filter</span>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4" style="margin-bottom:10px">
+        <div class="row" style="display: -webkit-box">
+
+          <div class="pd-5 pd-15-lt">
+
+            <span [class]="'badge badge-complete '+isSelected('number', 'none')"
+                  (click)="filter.number='none'; setFilter('number', '')">All</span>
+
+          </div>
+          <div class="pd-5">
+            <span [class]="'badge badge-complete '+isSelected('number', 'S')"
+                  (click)="filter.number='S'; setFilter('number', 'S')">S</span>
+          </div>
+          <div class="pd-5">
+            <span [class]="'badge badge-complete '+isSelected('number', 'BT')"
+                  (click)="filter.number='BT'; setFilter('number', 'BT') ">BT</span>
+
+          </div>
+          <div class="pd-5">
+            <span [class]="'badge badge-complete '+isSelected('number', 'XS')"
+                  (click)="filter.number='XS';  setFilter('number', 'XS')">XS</span>
+          </div>
+
+
+          <div class="pd-5">
+            <span [class]="'badge badge-complete '+isSelected('number', 'FC')"
+                  (click)="filter.number='FC'; setFilter('number', 'FC')">FC</span>
+
+          </div>
+          <div class="pd-5">
+            <span [class]="'badge badge-complete '+isSelected('number', 'SG')"
+                  (click)="filter.number='SG';  setFilter('number', 'SG')">SG</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2" style="margin-bottom:10px">
+        <div class="row" style="display: -webkit-box">
+          <div class="col-10">
+            <div class="dropdown">
+              <button style="color:black !important;" class="badge dropdown-toggle dpd" type="button"
+                      id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <ng-container *ngIf="filter.paid=='none'; else paid">Order status</ng-container>
+                <ng-template #paid>{{filter.paid}}</ng-template>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" *ngFor="let status of invoiceService.getValueList('status')" (click)="filter.paid=status; setFilter('status', status)">{{status}}</a>
+                <a class="dropdown-item" (click)="filter.paid='none'; setFilter('status', '')">All</a>
+              </div>
+            </div>
+            <!--<span [class]="'badge badge-pending '+isSelected('payement', 'espece')" (click)="filter.payement='espece'; getSearchResults()">Especes</span>-->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1" style="margin-bottom:10px">
+        <div class="row" style="display: -webkit-box">
+          <div class="col-10">
+            <div class="dropdown">
+              <button style="color:black !important;" class="badge dropdown-toggle dpd" type="button"
+                      id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <ng-container *ngIf="filter.eu=='none'; else eu">TVA Type</ng-container>
+                <ng-template #eu>
+                  <ng-container *ngIf="filter.eu =='true'">TVA invoices</ng-container>
+                  <ng-container *ngIf="filter.eu =='false'">Non-TVA invoices</ng-container>
+                </ng-template>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="filter.eu='true'; setFilter('eu', 'true')">TVA</a>
+                <a class="dropdown-item" (click)="filter.eu='false'; setFilter('eu', undefined)">Sans TVA</a>
+                <a class="dropdown-item" (click)="filter.eu='none'; setFilter('eu', '')">Tout</a>
+
+              </div>
+            </div>
+            <!--<span [class]="'badge badge-pending '+isSelected('payement', 'espece')" (click)="filter.payement='espece'; getSearchResults()">Especes</span>-->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2" style="margin-bottom:10px">
+        <div class="row" style="display: -webkit-box">
+          <div class="col-10 ">
+            <div class="dropdown">
+              <button style="color:black !important;" class="badge dropdown-toggle dpd" type="button"
+                      id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <ng-container *ngIf="filter.link=='none'; else link">Link</ng-container>
+                <ng-template #link>{{filter.link}}</ng-template>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" *ngFor="let link of invoiceService.getValueList('isLinked')" (click)="filter.link=link; setFilter('isLinked',link)">{{link}}</a>
+                <!--<a class="dropdown-item" (click)="filter.link='partially_linked'; getSearchResults()">Partially-->
+                  <!--linked</a>-->
+                <!--<a class="dropdown-item" (click)="filter.link='unlinked'; getSearchResults()">Unlinked</a>-->
+
+                <a class="dropdown-item" (click)="filter.link='none'; setFilter('isLinked','')">All</a>
+
+              </div>
+            </div>
+            <!--<span [class]="'badge badge-pending '+isSelected('payement', 'espece')" (click)="filter.payement='espece'; getSearchResults()">Especes</span>-->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1" style="" >
+        <div class="row" style="display: -webkit-box;  ">
+          <div class="col-12">
+          <div class="dropdown">
+
+          <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <ngb-datepicker class="form-control" placeholder="yyyy-mm-dd"
+                                name="dp" ngbDatepicker #d="ngbDatepicker" (select)="onDateSelection($event)" [dayTemplate]="t"  [hidden]="datehide">
+                </ngb-datepicker>
+                <ng-template #t let-date let-focused="focused">
+  <span class="custom-day"
+        [class.focused]="focused"
+        [class.range]="isRange(date)"
+        [class.faded]="isHovered(date) || isInside(date)"
+        (mouseenter)="hoveredDate = date"
+        (mouseleave)="hoveredDate = null">
+    {{ date.day }}
+  </span>
+                </ng-template>
+                <div class="input-group-append">
+                  <button class="badge dropdown-toggle dpd" style="color:black!important;" (click)="datehide = !datehide" type="button">Date <i class="fas fa-calendar-alt"></i></button>
+                </div>
+              </div>
+            </div>
           </form>
-        </td>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      </tr>
-    </ng-container>
-    </tbody>
-    <tfoot>
-    <tr>
-      <td colspan="4">
-        <mfBootstrapPaginator [rowsOnPageSet]="[40,80,160]"></mfBootstrapPaginator>
-      </td>
-    </tr>
-    </tfoot>
 
-  </table>
+    <div class="card-body--">
+      <div class="table-responsive  table-stats order-table ov-h">
+
+        <table class="table table-hover " [mfData]="invoiceList" #mf="mfDataTable" [mfRowsOnPage]="40"
+               [mfSortBy]='"date"' [mfSortOrder]="'desc'">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th scope="col">
+              <mfDefaultSorter by="nom">Nom</mfDefaultSorter>
+            </th>
+
+            <th scope="col">
+              <mfDefaultSorter by="date">Date</mfDefaultSorter>
+            </th>
+            <th scope="col">
+              <mfDefaultSorter by="type">Total</mfDefaultSorter>
+            </th>
+            <th scope="col"> Print</th>
+            <th scope="col"> Dl</th>
+            <!--<th scope="col">-->
+            <!--<mfDefaultSorter by="paid" >Paid</mfDefaultSorter>-->
+            <!--</th>-->
+            <th scope="col">
+              <mfDefaultSorter by="number">Number</mfDefaultSorter>
+            </th>
+            <!--<th scope="col">-->
+            <!--<mfDefaultSorter by="notes">note</mfDefaultSorter>-->
+            <!--</th>-->
+            <th scope="col">
+              <mfDefaultSorter by="notes">Infos</mfDefaultSorter>
+            </th>
+            <th scope="col">
+              <mfDefaultSorter by="notes">Linked</mfDefaultSorter>
+            </th>
+            <th scope="col">
+              <mfDefaultSorter by="notes">Paid</mfDefaultSorter>
+            </th>
+            <th scope="col">
+              <mfDefaultSorter by="notes">Refunded</mfDefaultSorter>
+            </th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let inv of mf.data; let i=index">
+            <tr [class]="'table-row bg-white'" *ngIf="inv['paid']!='voided'">
+
+              <td class="dialing" (click)="expand(i,inv)">{{i + 1}}</td>
+              <td scope="row" (click)="expand(i,inv)">{{inv['client']['name']}}</td>
+
+              <td (click)="expand(i,inv)">{{inv['date'] | date}}</td>
+              <td (click)="expand(i,inv)">{{inv['total']}}</td>
+
+              <td>
+                <button class="btn btn-sm btn-grey" (click)="assign(inv);this.invoicePrinter.openPrintPopup( inv)"><i
+                  class="fas fa-print"></i></button>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-grey" (click)="assign(inv);this.invoicePrinter.exportAsPDF(inv)"><i class="fas fa-download"></i>
+                </button>
+              </td>
+              <!--<td>-->
+              <!--<ng-container *ngIf="inv['paid']!=true && inv['paid']!='paid'; else paid">-->
+              <!--<button class="btn btn-sm btn-alert" (click)="markAsPaid(inv)"><i class="fas fa-money-check-alt"></i>-->
+              <!--</button>-->
+              <!--</ng-container>-->
+              <!--<ng-template #paid>-->
+              <!--<i class="fas fa-money-check-alt"></i>-->
+              <!--</ng-template>-->
+
+              <!--</td>-->
+              <td class="" (click)="expand(i,inv)">{{inv['number']}}</td>
+
+              <!--<td>-->
+              <!--<form>-->
+              <!--<div class="col-auto"><input [class]="'form-control orderNumb '+checkColorPolice(inv)"-->
+              <!--placeholder="Notes" [(ngModel)]="inv['notes']" name="ngModel"-->
+              <!--(change)="updatePoliceNumb(inv)"/></div>-->
+              <!--</form>-->
+              <!--</td>-->
+              <td style="text-align: center">
+                <button class="btn btn-sm btn-info" (click)="getInfos(inv)"><i class="fas fa-info"
+                                                                               style="margin-right:10px"></i>Infos
+                </button>
+              </td>
+              <td style="text-align:center">
+                <i *ngIf="isLinked(inv)=='fully_linked'" class="fas fa-check"></i>
+                <i *ngIf="isLinked(inv)=='partially_linked'" class="fas fa-tasks"></i>
+
+              </td>
+              <td style="text-align:center">
+                <span class="sp-badge"><input type="checkbox" [(ngModel)]="inv['paid2']" (ngModelChange)="updateInvoice(inv)" /></span>
+              </td>
+              <td style="text-align:center">
+                <span class="sp-badge">{{inv['status']}}</span>
+              </td>
+            </tr>
+            <tr *ngIf="expanded==inv['objectID']">
+              <td colspan="11" style="padding:0">
+                <div class="table table-stats order-table ov-h"
+                     style="padding: 0 20px; box-shadow: inset 0px 0px 11px 0px rgba(0,0,0,0.2); background-color: ghostwhite; ">
+                  <!--<ng-container *ngIf="searchInput == '' && RepsearchInputNote == '' && RepsearchInput== '' ; else results">-->
+
+                  <table class="table table-hover " [mfData]="inv.articles" #mf="mfDataTable" [mfRowsOnPage]="40"
+                         [mfSortBy]='"timed_date"' [mfSortOrder]="'desc'" style="background-color: transparent">
+                    <!--<thead>-->
+                    <!--<tr>-->
+                    <!--&lt;!&ndash;<th scope="col">Del</th>&ndash;&gt;-->
+                    <!--<th class="dialing" >#</th>-->
+                    <!--<th scope="col">-->
+                    <!--<mfDefaultSorter by="nom">Item on Invoice</mfDefaultSorter>-->
+                    <!--</th>-->
+                    <!--&lt;!&ndash;<th scope="col "><i class="fas fa-envelope"></i></th>&ndash;&gt;-->
+
+                    <!--&lt;!&ndash;<th scope="col">  <mfDefaultSorter by="type">Type</mfDefaultSorter></th>&ndash;&gt;-->
+                    <!--<th scope="col">-->
+                    <!--<mfDefaultSorter by="modele">Size</mfDefaultSorter>-->
+                    <!--</th>-->
+                    <!--<th scope="col">-->
+                    <!--<mfDefaultSorter by="prix">Price sold</mfDefaultSorter>-->
+                    <!--</th>-->
+                    <!--<th scope="col">-->
+                    <!--<mfDefaultSorter by="order_number">Commande</mfDefaultSorter>-->
+                    <!--</th>-->
+                    <!--&lt;!&ndash;<th scope="col"><mfDefaultSorter by="paid" (click)="keepPaid()" >Paid</mfDefaultSorter></th>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<th scope="col">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<mfDefaultSorter by="police_number">Note</mfDefaultSorter>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</th>&ndash;&gt;-->
+                    <!--<th scope="col"  (click)="reload(inv)"><mfDefaultSorter>Fiche <i class="fas fa-redo-alt"></i></mfDefaultSorter></th>-->
+
+                    <!--</tr>-->
+                    <!--</thead>-->
+                    <tbody>
+                    <ng-container *ngFor="let item of mf.data,let i=index">
+                      <tr *ngIf="item['refunded'] != 'refunded'" [class]="'table-row '">
+
+                        <!--<td>-->
+                        <!--<button class="btn btn-sm btn-danger" (click)="openDelete(fiche.objectID)"><i-->
+                        <!--class="fas fa-trash"></i></button>-->
+                        <!--</td>-->
+
+                        <td scope="row" style="max-width: 200px;">{{item['modele']}}</td>
+                        <!--<td><button *ngIf="fiche['mail_paypal']" class="btn btn-sm btn-info" (click)="openMailModal(fiche)"><i class="fas fa-envelope"></i></button></td>-->
+                        <!---->
+                        <td>
+                          {{item['size']}}
+                          <!--<input type="text" class="form-control" required [(ngModel)]="fiche['date']"-->
+                          <!--#expi="ngModel" name="date_expire"-->
+                          <!--(change)="changeDate(fiche,$event.target.value)"/>-->
+                        </td>
+                        <!--<td>{{fiche['type']}}</td>-->
+
+                        <td>
+                          <!--<input type="text" class="form-control" required [(ngModel)]="fiche['modele']"-->
+                          <!--#expi="ngModel" name="date_expire"-->
+                          <!--(change)="changeModele(fiche,$event.target.value)"/>-->
+
+                          <!--<br/> <input type="text" class="form-control" required [(ngModel)]="fiche['size']" #expi="ngModel"-->
+                          <!--name="date_expire" (change)="changeSize(fiche,$event.target.value)"/> {{fiche['color']}}-->
+                          {{item['prix']}}
+                        </td>
+
+
+                        <td>
+                          {{inv['number']}}
+                        </td>
+                        <!--<td><button *ngIf="fiche['paid']!== undefined" class="btn btn-sm btn-warning" (click)="markAsPaid(fiche)"><i class="fas fa-money-check-alt"></i></button>-->
+                        <!--</td>-->
+
+                        <td style="text-align: left;">
+                          <select  *ngIf="!item['fiche']" [(ngModel)]="item['fiche']" (ngModelChange)="linkFiche(i,$event)" class="itemSelect">
+                            <option *ngFor="let fiche of ficheList" [ngValue]="fiche" 
+                                    [disabled]="getArticles(inv, fiche['objectID'])" >{{fiche.nom}} {{fiche.prenom}}
+                              | {{fiche.modele}} - {{fiche.size}}</option>
+                          </select>
+                          <ng-container *ngIf="item['fiche']"><select style="-webkit-appearance: button;padding: 0 5px;" disabled><option>{{item.fiche.nom}} {{item.fiche.prenom}}
+                            | {{item.fiche.modele}} - {{item.fiche.size}}</option></select> <i class="fas fa-times" (click)="item['fiche'] = undefined"></i>
+                          </ng-container>
+                        </td>
+                        <!--<td><input type="checkbox" id="scales" name="scales"-->
+                        <!--(change)="changeProcess(fiche)"-->
+                        <!--[checked]="fiche.processed"></td>-->
+                      </tr>
+
+                    </ng-container>
+                    <tr *ngIf="inv['discount']">
+                      <td></td>
+                      <td> Discount</td>
+                      <td> - {{inv['discount']}}</td>
+                    </tr>
+                    <tr *ngIf="inv['shipping']">
+                      <td></td>
+                      <td> Shipping</td>
+                      <td>{{inv['shipping']}}</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td><b>Total</b></td>
+                      <td>{{inv['total']}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <!--<tr>-->
+                    <!--<td colspan="4">-->
+                    <!--<mfBootstrapPaginator [rowsOnPageSet]="[40,80,160]"></mfBootstrapPaginator>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    </tfoot>
+
+                  </table>
+
+                </div>
+
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="4">
+              <mfBootstrapPaginator [rowsOnPageSet]="[40,80,160]"></mfBootstrapPaginator>
+            </td>
+          </tr>
+          </tfoot>
+
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-<div div id="onMargin" style="display:none" #onMargin *ngIf="invoice">
-<p class="c7"><span
-  style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 185.50px; height: 50.51px;"><img
-  alt="" src="https://cdn.shopify.com/s/files/1/0006/4353/0817/files/COPROOM_BOXLOGO.png?7616672809349822695"
-  style="width: 185.50px; height: 50.51px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
-  title=""></span></p>
-<p class="c2 c6"><span class="c5"></span></p>
-<p class="c2"><span>FACTURE</span><span class="c14">&nbsp;BT{{invoice.number}}</span></p>
-<p class="c2"><span>{{invoice.date | date}}</span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2"><span class="c5">COPROOM</span></p>
-<p class="c2"><span class="c0">22 TER BLVD DU GENERAL LECLERC</span></p>
-<p class="c2"><span class="c0">92200 NEUILLY SUR SEINE</span></p>
-<p class="c8" *ngFor="let item of invoice.client"><span class="c0">{{item}}</span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c3"></span></p>
-<p class="c2 c6"><span class="c3"></span></p><a id="t.a61b80bb227d9d189ce56b79cae764543e45ef32"></a><a id="t.0"></a>
-  <table class="table table-striped table-bordered ">
-    <thead>
-    <tr>
-      <th scope="col">Description</th>
-      <th scope="col">Quantite</th>
-      <th scope="col">Prix en euros</th>
-      <th scope="col">Total en euros</th>
-    </tr>
-    </thead>
-    <tbody >
-    <tr *ngFor="let article of invoice['articles']">
-      <td>{{article?.modele}} {{article?.size}}</td>
-      <td>{{article?.quantity}}</td>
-      <td>{{article?.prix}} euros</td>
-      <td>{{article?.prix*article?.quantity}} euros</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td style="text-align: end;"><b>TOTAL en euros:</b></td>
-      <td>{{invoice.total}} euros</td>
-    </tr>
-    </tbody>
-  </table>
-<!--<table class="c10">-->
-  <!--<tbody>-->
-  <!--<tr class="c13">-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c15"><span>DESCRIPTION</span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c15"><span>QUANTIT&Eacute;</span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c12"><span>PRIX en euro &euro;</span></p></td>-->
-    <!--<td class="c16" colspan="1" rowspan="1"><p class="c12"><span class="c0">TOTAL en euro &euro;</span></p></td>-->
-  <!--</tr>-->
-  <!--<tr class="c13">-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-  <!--</tr>-->
-  <!--<tr class="c13">-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-  <!--</tr>-->
-  <!--<tr class="c13">-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c12"><span class="c0">TOTAL en euro &euro;</span></p></td>-->
-    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
-  <!--</tr>-->
-  <!--</tbody>-->
-<!--</table>-->
-<p class="c2 c6"><span class="c3"></span></p>
-<p class="c2"><span class="c3">Merci d&rsquo;effectuer le virement &agrave;:</span></p>
-<p class="c2"><span class="c0">NOM: ROOM GROUP</span></p>
-<p class="c2"><span class="c0">IBAN: FR7616798000010000047204104</span></p>
-<p class="c2"><span class="c0">BIC: TRZOFR21XX</span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c7"><span class="c0">Merci pour votre commande.</span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c2 c6"><span class="c0"></span></p>
-<p class="c7"><span class="c0">_______________________________________________________________</span></p>
-<p class="c7" style="margin-bottom: 0.2em;"><span class="c11">ROOM GROUP SASU AU CAPITAL DE 6000&euro;</span></p>
-<p class="c7" style="margin-bottom: 0.2em;"><span class="c11">RCS Nanterre: 837 528 470 - N&deg;TVA Intracommunautaire: FR 48837528 470</span></p>
-<p class="c7" style="margin-bottom: 0.2em;"><span class="c11">&nbsp; &nbsp; &nbsp; &nbsp; Regime TVA sur marge Article 297 A du CGI Directive communautaire 2006/112/CE</span>
-</p>
-</div>
+<ngx-smart-modal #myModal identifier="myModal" [customClass]="'nsm-dialog-animation-btt'" [hideDelay]="300">
+
+  <app-invoice [invoice]="invoice" #invoiceTemplate></app-invoice>
+
+</ngx-smart-modal>
+<a id="testa" style="display:none">t</a>
+<!--<angular2csv [data]="this.invoiceList" filename="database" [options]="options"></angular2csv>-->
+<app-invoice-printer #invoicePrinter [invoice]="invoice"></app-invoice-printer>

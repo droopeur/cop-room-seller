@@ -1,0 +1,480 @@
+<h2 class="fiche-title">{{invoice['number']}} Detail de la commande </h2>
+<h3 class="fiche-subtitle">{{invoice['total']}} - {{invoice['date']  | date}}</h3>
+<span class="transac-badge">invoice</span>
+<div class="row fiche-row">
+  <!--<a class="btn fiche-btn">Tracking</a>-->
+  <button class="btn fiche-btn" (click)="invoicePrinter.exportAsPDF(invoice)">Download</button>
+  <button class="btn fiche-btn" (click)="invoicePrinter.openPrintPopup(invoice)">Print</button>
+</div>
+
+<div class="detail">
+  <h4 style="margin-top: 5px!important;">Items</h4>
+  <div class="row row-choice" style="margin-top:0">
+    <div class="choice-btn" style="width: -webkit-fill-available;" *ngFor="let article of invoice['articles']; let i = index">
+      <div class="container">
+        <div class="row">
+          <div class="col-7">
+            <div class="art-title">
+              {{article.modele}}
+            </div>
+            <div class="art-subtitle">
+              <span class="art-size">{{article.size}}</span>
+              <span class="art-fiche">
+  <i class="far fa-file-alt" style="color:white"></i>
+  <select  *ngIf="!article['fiche']" [(ngModel)]="article['fiche']"  (ngModelChange)="linkFiche(i, $event)" [name]="invoice.objectID">
+      <option *ngFor="let fiche of ficheList" [ngValue]="fiche" >{{fiche.nom}} {{fiche.prenom}}
+        | {{fiche.modele}} - {{fiche.size}}</option>
+    </select>
+                <ng-container *ngIf="article['fiche']"><select style="-webkit-appearance: button;padding: 0 5px;" disabled><option>{{article.fiche.nom}} {{article.fiche.prenom}}
+                  | {{article.fiche.modele}} - {{article.fiche.size}}</option></select> <i class="fas fa-times" (click)="article['fiche'] = undefined"></i>
+                </ng-container>
+              </span>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="art-price">{{math.round(article['prix'])}}€</div>
+            <div class="art-tva" *ngIf="article['tva_margin']">{{article['tva_margin']}}€</div>
+            <div class="art-tva" *ngIf="article['tva_intracom']">{{article['tva_intracom']}}€</div>
+
+          </div>
+          <div class="col-3">
+            <div class="row-btn">
+              <button class="art-btn" id="exchange" (click)="exchange()" ><i class="fas fa-sync-alt" style="color:#8C76F2"></i></button>
+              <button class="art-btn" id="refund" (click)="refund(i)"><i class="fas fa-times" style="color:#EB3F00"></i></button>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="detail" *ngIf="invoice['refunded']">
+  <h4>Refunded</h4>
+  <div class="row row-choice" >
+    <div class="choice-btn" style="width: -webkit-fill-available;" *ngFor="let article of invoice['refunded']; let i = index">
+      <div class="container">
+        <div class="row">
+          <div class="col-7">
+            <div class="art-title">
+              {{article.modele}}
+            </div>
+            <div class="art-subtitle">
+              <span class="art-size">{{article.size}}</span>
+              <span class="art-refund">
+Refunded
+              </span>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="art-price">{{math.round(article['prix'])}}€</div>
+            <div class="art-tva" *ngIf="article['tva']">100€</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="detail">
+  <h4>Client <span class="paid-badge"
+                   [ngClass]="{'eu':invoice && invoice['client']['eu'], 'not-eu': invoice && !invoice['client']['eu']}"></span></h4>
+  <p>{{invoice['client']['name']}} </p>
+  <p>{{invoice['client']['mail']}}</p>
+  <p>{{invoice['client']['address1']}}</p>
+  <p>{{invoice['client']['address2']}}</p>
+  <p>{{invoice['client']['zip']}} - {{invoice['client']['city']}}</p>
+  <p>{{invoice['client']['country']}}</p>
+
+
+</div>
+
+<div class="detail">
+  <h4>Payement <span class="paid-badge"
+                     [ngClass]="{'paid':invoice && invoice['paid'], 'unpaid': invoice && !invoice['paid']}"></span></h4>
+  <p>Total : {{invoice['total']}}</p>
+  <p *ngIf="invoice.shipping">Shipping : {{invoice['shipping']}}</p>
+
+</div>
+<div class="detail hist" >
+  <h4 (click)="opened.hist= !opened.hist" style="margin-top: 5px!important;">Historique<span><i class="fas fa-chevron-down" ></i></span></h4>
+  <div class="hist-list" *ngIf="opened.hist">
+    <ul class="hist-list" *ngIf="opened.hist">
+      <li *ngFor="let state of invoice['hist'] | keys"> {{state.value.type}}: {{state.value.message}} - {{state.key | date }} <span style="color:brown"> {{state.value['employee']}}</span></li>
+    </ul>
+  </div>
+</div>
+<div class="detail hist" >
+  <h4 (click)="opened.modif= !opened.modif" style="margin-top: 5px!important;">Modifications<span><i class="fas fa-chevron-down" ></i></span></h4>
+  <div class="hist-list" *ngIf="opened.modif">
+    <button class="btn btn-sm btn-warning" style="margin-left:auto;margin-right:10px" (click)="markAsPaid(invoice)"><i
+      class="fas fa-money-check-alt"> Paid</i></button>
+    <div class="row form-group" style="margin-top:20px;">
+
+      <div class="col-8">
+        <div class="form-group" style="margin-bottom:0"><label for="postal-code" class=" form-control-label">Facture
+          Number</label>
+          <input [class]="'form-control'" placeholder="Facture nb"
+                 [(ngModel)]="invoice['number']" name="ngModel" (change)="updateOrderNumb(invoice)"/>
+        </div>
+      </div>
+    </div>
+
+    <h6 style="color:black; display: flex;margin-bottom:30px;margin-top:0px"><b class="col-md-2"
+                                                                                style="margin:auto 0;padding:0;margin-top:15px ">Client:</b>
+    </h6>
+    <p *ngIf="invoice['old_client']" style="color:red">The client address is badly formated please replace it:<br/>
+      <ng-container *ngFor="let line of invoice['old_client']">
+        {{line}}<br/>
+      </ng-container>
+    </p>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="name">Company or complete name </label>
+        <input type="name" class="form-control" id="name" placeholder="Name" [(ngModel)]="invoice['client']['name']"
+               name="name" (change)="updateInvoice(invoice)">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputAddress">Address</label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St"
+             [(ngModel)]="invoice['client']['address1']" name="address1" (change)="updateInvoice(invoice)">
+    </div>
+    <div class="form-group">
+      <label for="inputAddress2">Address 2</label>
+      <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor"
+             [(ngModel)]="invoice['client']['address2']" name="address2" (change)="updateInvoice(invoice)">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <label for="inputZip">Zip</label>
+        <input type="text" class="form-control" id="inputZip" [(ngModel)]="invoice['client']['zip']" name="zip"
+               (change)="updateInvoice(invoice)">
+      </div>
+      <div class="form-group col-md-5">
+        <label for="inputCity">City</label>
+        <input type="text" class="form-control" id="inputCity" [(ngModel)]="invoice['client']['city']" name="city"
+               (change)="updateInvoice(invoice)">
+      </div>
+      <div class="form-group col-md-5">
+        <label for="inputState">Country</label>
+        <select [(ngModel)]="invoice['client']['country']" name="country" class="form-control"
+                (change)="updateInvoice(invoice)">
+          <option value="AF">Afghanistan</option>
+          <option value="AX">Åland Islands</option>
+          <option value="AL">Albania</option>
+          <option value="DZ">Algeria</option>
+          <option value="AS">American Samoa</option>
+          <option value="AD">Andorra</option>
+          <option value="AO">Angola</option>
+          <option value="AI">Anguilla</option>
+          <option value="AQ">Antarctica</option>
+          <option value="AG">Antigua and Barbuda</option>
+          <option value="AR">Argentina</option>
+          <option value="AM">Armenia</option>
+          <option value="AW">Aruba</option>
+          <option value="AU">Australia</option>
+          <option value="AT">Austria</option>
+          <option value="AZ">Azerbaijan</option>
+          <option value="BS">Bahamas</option>
+          <option value="BH">Bahrain</option>
+          <option value="BD">Bangladesh</option>
+          <option value="BB">Barbados</option>
+          <option value="BY">Belarus</option>
+          <option value="BE">Belgium</option>
+          <option value="BZ">Belize</option>
+          <option value="BJ">Benin</option>
+          <option value="BM">Bermuda</option>
+          <option value="BT">Bhutan</option>
+          <option value="BO">Bolivia, Plurinational State of</option>
+          <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
+          <option value="BA">Bosnia and Herzegovina</option>
+          <option value="BW">Botswana</option>
+          <option value="BV">Bouvet Island</option>
+          <option value="BR">Brazil</option>
+          <option value="IO">British Indian Ocean Territory</option>
+          <option value="BN">Brunei Darussalam</option>
+          <option value="BG">Bulgaria</option>
+          <option value="BF">Burkina Faso</option>
+          <option value="BI">Burundi</option>
+          <option value="KH">Cambodia</option>
+          <option value="CM">Cameroon</option>
+          <option value="CA">Canada</option>
+          <option value="CV">Cape Verde</option>
+          <option value="KY">Cayman Islands</option>
+          <option value="CF">Central African Republic</option>
+          <option value="TD">Chad</option>
+          <option value="CL">Chile</option>
+          <option value="CN">China</option>
+          <option value="CX">Christmas Island</option>
+          <option value="CC">Cocos (Keeling) Islands</option>
+          <option value="CO">Colombia</option>
+          <option value="KM">Comoros</option>
+          <option value="CG">Congo</option>
+          <option value="CD">Congo, the Democratic Republic of the</option>
+          <option value="CK">Cook Islands</option>
+          <option value="CR">Costa Rica</option>
+          <option value="CI">Côte d'Ivoire</option>
+          <option value="HR">Croatia</option>
+          <option value="CU">Cuba</option>
+          <option value="CW">Curaçao</option>
+          <option value="CY">Cyprus</option>
+          <option value="CZ">Czech Republic</option>
+          <option value="DK">Denmark</option>
+          <option value="DJ">Djibouti</option>
+          <option value="DM">Dominica</option>
+          <option value="DO">Dominican Republic</option>
+          <option value="EC">Ecuador</option>
+          <option value="EG">Egypt</option>
+          <option value="SV">El Salvador</option>
+          <option value="GQ">Equatorial Guinea</option>
+          <option value="ER">Eritrea</option>
+          <option value="EE">Estonia</option>
+          <option value="ET">Ethiopia</option>
+          <option value="FK">Falkland Islands (Malvinas)</option>
+          <option value="FO">Faroe Islands</option>
+          <option value="FJ">Fiji</option>
+          <option value="FI">Finland</option>
+          <option value="FR">France</option>
+          <option value="GF">French Guiana</option>
+          <option value="PF">French Polynesia</option>
+          <option value="TF">French Southern Territories</option>
+          <option value="GA">Gabon</option>
+          <option value="GM">Gambia</option>
+          <option value="GE">Georgia</option>
+          <option value="DE">Germany</option>
+          <option value="GH">Ghana</option>
+          <option value="GI">Gibraltar</option>
+          <option value="GR">Greece</option>
+          <option value="GL">Greenland</option>
+          <option value="GD">Grenada</option>
+          <option value="GP">Guadeloupe</option>
+          <option value="GU">Guam</option>
+          <option value="GT">Guatemala</option>
+          <option value="GG">Guernsey</option>
+          <option value="GN">Guinea</option>
+          <option value="GW">Guinea-Bissau</option>
+          <option value="GY">Guyana</option>
+          <option value="HT">Haiti</option>
+          <option value="HM">Heard Island and McDonald Islands</option>
+          <option value="VA">Holy See (Vatican City State)</option>
+          <option value="HN">Honduras</option>
+          <option value="HK">Hong Kong</option>
+          <option value="HU">Hungary</option>
+          <option value="IS">Iceland</option>
+          <option value="IN">India</option>
+          <option value="ID">Indonesia</option>
+          <option value="IR">Iran, Islamic Republic of</option>
+          <option value="IQ">Iraq</option>
+          <option value="IE">Ireland</option>
+          <option value="IM">Isle of Man</option>
+          <option value="IL">Israel</option>
+          <option value="IT">Italy</option>
+          <option value="JM">Jamaica</option>
+          <option value="JP">Japan</option>
+          <option value="JE">Jersey</option>
+          <option value="JO">Jordan</option>
+          <option value="KZ">Kazakhstan</option>
+          <option value="KE">Kenya</option>
+          <option value="KI">Kiribati</option>
+          <option value="KP">Korea, Democratic People's Republic of</option>
+          <option value="KR">Korea, Republic of</option>
+          <option value="KW">Kuwait</option>
+          <option value="KG">Kyrgyzstan</option>
+          <option value="LA">Lao People's Democratic Republic</option>
+          <option value="LV">Latvia</option>
+          <option value="LB">Lebanon</option>
+          <option value="LS">Lesotho</option>
+          <option value="LR">Liberia</option>
+          <option value="LY">Libya</option>
+          <option value="LI">Liechtenstein</option>
+          <option value="LT">Lithuania</option>
+          <option value="LU">Luxembourg</option>
+          <option value="MO">Macao</option>
+          <option value="MK">Macedonia, the former Yugoslav Republic of</option>
+          <option value="MG">Madagascar</option>
+          <option value="MW">Malawi</option>
+          <option value="MY">Malaysia</option>
+          <option value="MV">Maldives</option>
+          <option value="ML">Mali</option>
+          <option value="MT">Malta</option>
+          <option value="MH">Marshall Islands</option>
+          <option value="MQ">Martinique</option>
+          <option value="MR">Mauritania</option>
+          <option value="MU">Mauritius</option>
+          <option value="YT">Mayotte</option>
+          <option value="MX">Mexico</option>
+          <option value="FM">Micronesia, Federated States of</option>
+          <option value="MD">Moldova, Republic of</option>
+          <option value="MC">Monaco</option>
+          <option value="MN">Mongolia</option>
+          <option value="ME">Montenegro</option>
+          <option value="MS">Montserrat</option>
+          <option value="MA">Morocco</option>
+          <option value="MZ">Mozambique</option>
+          <option value="MM">Myanmar</option>
+          <option value="NA">Namibia</option>
+          <option value="NR">Nauru</option>
+          <option value="NP">Nepal</option>
+          <option value="NL">Netherlands</option>
+          <option value="NC">New Caledonia</option>
+          <option value="NZ">New Zealand</option>
+          <option value="NI">Nicaragua</option>
+          <option value="NE">Niger</option>
+          <option value="NG">Nigeria</option>
+          <option value="NU">Niue</option>
+          <option value="NF">Norfolk Island</option>
+          <option value="MP">Northern Mariana Islands</option>
+          <option value="NO">Norway</option>
+          <option value="OM">Oman</option>
+          <option value="PK">Pakistan</option>
+          <option value="PW">Palau</option>
+          <option value="PS">Palestinian Territory, Occupied</option>
+          <option value="PA">Panama</option>
+          <option value="PG">Papua New Guinea</option>
+          <option value="PY">Paraguay</option>
+          <option value="PE">Peru</option>
+          <option value="PH">Philippines</option>
+          <option value="PN">Pitcairn</option>
+          <option value="PL">Poland</option>
+          <option value="PT">Portugal</option>
+          <option value="PR">Puerto Rico</option>
+          <option value="QA">Qatar</option>
+          <option value="RE">Réunion</option>
+          <option value="RO">Romania</option>
+          <option value="RU">Russian Federation</option>
+          <option value="RW">Rwanda</option>
+          <option value="BL">Saint Barthélemy</option>
+          <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
+          <option value="KN">Saint Kitts and Nevis</option>
+          <option value="LC">Saint Lucia</option>
+          <option value="MF">Saint Martin (French part)</option>
+          <option value="PM">Saint Pierre and Miquelon</option>
+          <option value="VC">Saint Vincent and the Grenadines</option>
+          <option value="WS">Samoa</option>
+          <option value="SM">San Marino</option>
+          <option value="ST">Sao Tome and Principe</option>
+          <option value="SA">Saudi Arabia</option>
+          <option value="SN">Senegal</option>
+          <option value="RS">Serbia</option>
+          <option value="SC">Seychelles</option>
+          <option value="SL">Sierra Leone</option>
+          <option value="SG">Singapore</option>
+          <option value="SX">Sint Maarten (Dutch part)</option>
+          <option value="SK">Slovakia</option>
+          <option value="SI">Slovenia</option>
+          <option value="SB">Solomon Islands</option>
+          <option value="SO">Somalia</option>
+          <option value="ZA">South Africa</option>
+          <option value="GS">South Georgia and the South Sandwich Islands</option>
+          <option value="SS">South Sudan</option>
+          <option value="ES">Spain</option>
+          <option value="LK">Sri Lanka</option>
+          <option value="SD">Sudan</option>
+          <option value="SR">Suriname</option>
+          <option value="SJ">Svalbard and Jan Mayen</option>
+          <option value="SZ">Swaziland</option>
+          <option value="SE">Sweden</option>
+          <option value="CH">Switzerland</option>
+          <option value="SY">Syrian Arab Republic</option>
+          <option value="TW">Taiwan, Province of China</option>
+          <option value="TJ">Tajikistan</option>
+          <option value="TZ">Tanzania, United Republic of</option>
+          <option value="TH">Thailand</option>
+          <option value="TL">Timor-Leste</option>
+          <option value="TG">Togo</option>
+          <option value="TK">Tokelau</option>
+          <option value="TO">Tonga</option>
+          <option value="TT">Trinidad and Tobago</option>
+          <option value="TN">Tunisia</option>
+          <option value="TR">Turkey</option>
+          <option value="TM">Turkmenistan</option>
+          <option value="TC">Turks and Caicos Islands</option>
+          <option value="TV">Tuvalu</option>
+          <option value="UG">Uganda</option>
+          <option value="UA">Ukraine</option>
+          <option value="AE">United Arab Emirates</option>
+          <option value="GB">United Kingdom</option>
+          <option value="US">United States</option>
+          <option value="UM">United States Minor Outlying Islands</option>
+          <option value="UY">Uruguay</option>
+          <option value="UZ">Uzbekistan</option>
+          <option value="VU">Vanuatu</option>
+          <option value="VE">Venezuela, Bolivarian Republic of</option>
+          <option value="VN">Viet Nam</option>
+          <option value="VG">Virgin Islands, British</option>
+          <option value="VI">Virgin Islands, U.S.</option>
+          <option value="WF">Wallis and Futuna</option>
+          <option value="EH">Western Sahara</option>
+          <option value="YE">Yemen</option>
+          <option value="ZM">Zambia</option>
+          <option value="ZW">Zimbabwe</option>
+        </select>
+      </div>
+
+    </div>
+
+    <h6 style="color:black;padding-top: 0;"><b>Type:</b> {{invoice['type']}}</h6>
+
+    <div class="form-group"><label for="date_expire" class=" form-control-label">Date exp</label>
+      <input type="text" class="form-control" required [(ngModel)]="invoice['date']"
+              name="date_expire" id="date_expire"
+             (ngModelChange)="updateInvoice(invoice)"/>
+
+    </div>
+    <ng-container *ngFor="let modele of invoice['articles']; let i = index">
+
+      <div class="form-group" *ngIf="modele['refunded']!='refunded'; else refundTemp">
+        <label for="vat" class=" form-control-label">Article {{i + 1}} Size and price</label>
+
+        <div class="form-row">
+          <div class="col-md-6">
+            <input type="text" class="form-control " required [(ngModel)]="modele['modele']"
+                   #exp="ngModel" name="date_expire"
+                   (change)="changeModele(invoice,$event.target.value,i)"/>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="form-control" required [(ngModel)]="modele['size']" #expi="ngModel"
+                   name="date_expire" (change)="changeSize(invoice,$event.target.value,i)"/>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="form-control" required [(ngModel)]="modele['prix']"
+                   #fichp="ngModel" name="date_expire"
+                   (change)="changePrice(invoice,$event.target.value,i)"/>
+          </div>
+          <!--<div class="col-md-2" style="display: flex;">-->
+            <!--<span class="badge badge-alert" style="margin:auto!important" (click)="refund(invoice,i)">refund</span>-->
+          <!--</div>-->
+
+
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="name">Company or complete name </label>
+            <input type="name" class="form-control" id="shipping" placeholder="Shipping" [(ngModel)]="invoice['shipping']"
+                   name="name" (ngModelChange)="updateInvoice(invoice)">
+          </div>
+        </div>
+      </div>
+      <ng-template #refundTemp>
+        <p style="color:red">
+          <b>Refunded: </b> {{modele['modele']}} {{modele['size']}} - {{modele['prix']}}€
+        </p>
+      </ng-template>
+    </ng-container>
+
+    <div class="form-group"><label for="country" class=" form-control-label">Note</label>
+      <input style="" [class]="'form-control '" placeholder="Item nb"
+             [(ngModel)]="invoice['police_number']" name="ngModel" (change)="updatePoliceNumb(invoice)"/>
+    </div>
+    <a *ngIf="invoice['receipt_url']" [href]="invoice['receipt_url']" target="_blank">Receipt image</a>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger badge-alert" data-dismiss="modal" (click)="delete(invoice['objectID'])">Delete</button>
+</div>
+<app-invoice-printer #invoicePrinter [invoice]="invoice"></app-invoice-printer>

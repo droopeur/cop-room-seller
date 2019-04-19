@@ -1,0 +1,197 @@
+<div class="container">
+  <div class="alert alert-success" *ngIf="success"> Receipt succesfully uploaded</div>
+  <div class="alert alert-warning" *ngIf="fail">Failed to upload receipt</div>
+  <div class="card" >
+    <div class="card-body">
+      <div class="browse-wrap">
+  <div class="title">Choose a file to upload</div>
+  <input type="file" name="upload" class="upload" (change)="upload($event)" accept=".png,.jpg,.jpeg" title="Choose a file to upload" [disabled]="inputDisabled()">
+
+</div>
+      <div class="progress-box progress-2">
+        <h4 class="por-title" *ngIf="!downloadUrl">Upload progress</h4>
+        <h4 class="por-title two" *ngIf="!!downloadUrl">Justificatif uploadé</h4>
+        <i class="fas fa-times" *ngIf="!!downloadUrl" (click)="deleteUpload()"></i>
+        <div class="progress mb-2" style="height: 5px;">
+          <div [class]="'progress-bar bg-flat-color-2 '+!!downloadUrl" role="progressbar" [style.width]="progress" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+  </div>
+  </div>
+<form #addFicheForm="ngForm" >
+  <div class="card" style="margin-bottom: 0.9em;">
+    <div class="card-body">
+  <div class="form-group form-row">
+    <div class="col-md-6">
+    <label for="inputmodele">SHOP NAME</label>
+    <input type="text" class="form-control" [id]="'inputmodele'" placeholder="SHOP NAME" [(ngModel)]="receipt.nom"  name="name" required >
+    </div>
+    <!--<div class="col-md-6">-->
+      <!--<div class="form-group col-md-6" style="display: flex">-->
+        <!--<input type="checkbox" name="toggle" class="sw" id="toggle-2" [(ngModel)]="ttc">-->
+        <!--<label style="margin:auto;margin-left:20px" for="toggle-2"><span>TTC</span>-->
+        <!--</label>-->
+      <!--</div>-->
+    <!--</div>-->
+    </div>
+      <div class="form-group form-row" style="margin-bottom:50px">
+        <div class="col-md-3">
+          <label for="inputmodele">Date</label>
+          <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                       name="dp" [(ngModel)]="date" ngbDatepicker #d="ngbDatepicker" name="date">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="fas fa-calendar-alt"></i></button>
+                </div>
+
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="col-md-6">
+            <label >hours   </label>
+
+                  <ngb-timepicker [(ngModel)]="time" [spinners]="false" name="time2"></ngb-timepicker>
+
+        </div>
+      </div>
+      <ng-container *ngFor="let model of modele, let i=index;">
+        <div class="form-row">
+          <div class="form-group col-lg-3">
+            <label >Nom de l'item</label>
+            <input type="text" class="form-control" [id]="'inputmodele'+i" placeholder="{{'home.model' | translate}}" [(ngModel)]="modele[i].modele"  name="model{{i}}" required (ngModelChange)="search($event,i)">
+            <ul class="dataList" [hidden]="this.modele[i]['showalgo']===true" >
+              <li *ngFor="let opt of datalist" (click)="modele[i]['modele']=opt.title;modele[i]['showalgo'] = true">
+                {{opt.title}}
+              </li>
+            </ul>
+            <!--<datalist id="testlist">-->
+              <!--<option *ngFor="let opt of datalist">{{opt.title}}</option>-->
+            <!--</datalist>-->
+            <small id="emailHelp" class="form-text text-muted">Utiliser le nom du shopify</small>
+          </div>
+          <div class="form-group col-lg-1">
+            <label >Taille </label>
+
+            <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="modele[i]['size']"  name="size" required>
+              <optgroup label="Sneakers">
+
+                <option *ngFor="let size of snkrsSizes" [value]="size + 'US'">{{size + 'US'}}</option>
+              </optgroup>
+              <optgroup label="Clothes">
+
+                <option *ngFor="let size of clothesSizes" [value]="size">{{size}}</option>
+              </optgroup>
+              <optgroup label="No size / One size">
+
+                <option  [value]="'OS'">OS</option>
+              </optgroup>
+            </select>
+            <small class="form-text text-muted">(si pas de taille mettre “OS” : One size)</small>
+
+          </div>
+          <div class="form-group col-lg-1">
+            <label >Quantite</label>
+            <input type="number" class="form-control" [id]="'inputquant'+i" placeholder="{{'home.quantity' | translate}}" [(ngModel)]="modele[i].quantity" name="quantity{{i}}" required>
+            <small id="emailHelp" class="form-text text-muted">Nombres only</small>
+
+          </div>
+
+          <div class="form-group col-lg-2">
+            <label >Prix</label>
+            <input type="number" class="form-control" [id]="'inputprix'+i" placeholder="{{'home.priceeur' | translate}}" [(ngModel)]="modele[i].prix" name="price{{i}}" required >
+            <small id="emailHelp" class="form-text text-muted">Nombres only</small>
+
+          </div>
+          <div class="col-lg-2">
+            <label >Commande</label>
+            <input type="text" class="form-control" placeholder="Order Number" [(ngModel)]="modele[i]['order_number']"  name="order{{i}}" [disabled]="idem && i!=0">
+            <small id="emailHelp" class="form-text text-muted">Numero de commande</small>
+
+          </div>
+          <div class="form-group col-lg-1">
+            <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+            <button class="btn btn-info" style="margin:auto" (click)="duplicate(modele[i])"><i class="fas fa-copy"></i></button>
+
+            <!--<input type="text" class="form-control" placeholder="Taille"  name="size" required>-->
+          </div>
+
+          <div class="col-lg-1" *ngIf="i==0; else cross">
+            <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+            <label class="switch">
+              <input type="checkbox" placeholder="Order Number" [(ngModel)]="idem"  name="label" (change)="switchIdem()">
+              <span class="slider round"></span>
+            </label>
+            <small id="emailHelp" class="form-text text-muted">Idem pour tous les items</small>
+
+          </div>
+          <div class="col-lg-1" style="text-align: left;" *ngIf="i==0 && modele.length>1">
+            <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+            <i class="far fa-times-circle" (click)="modele.splice(i,1)" style="    font-size: xx-large;
+    margin-left: auto;    margin-right: auto;
+    color: grey;"></i>
+          </div>
+          <ng-template #cross>
+            <div class="col-lg-1" style="text-align: center">
+              <h4 class="box-title" style="margin-bottom: 0.25em;"> &nbsp; </h4>
+              <i class="far fa-times-circle" (click)="modele.splice(i,1)" style="    font-size: xx-large;
+  margin-left: auto;    margin-right: auto;    color: grey;"></i>
+            </div>
+          </ng-template>
+
+        </div>
+
+        <!--<form class="form-row">-->
+    <!--<div class="form-group col-md-6">-->
+      <!--<label for="inputmodele{{i}}">{{'home.model' | translate}}</label>-->
+      <!--<input type="text" class="form-control" [id]="'inputmodele'+i" placeholder="{{'home.model' | translate}}" [(ngModel)]="modele[i].modele"  name="model{{i}}" required >-->
+    <!--</div>-->
+
+    <!--<div class="form-group col-md-2">-->
+      <!--<label for="inputmodele{{i}}">{{'home.size' | translate}}</label>-->
+      <!--<input  #type="ngModel" class="form-control" [id]="'inputmodele'+i"  [(ngModel)]="modele[i].size"  name="size{{i}}"  required >-->
+
+    <!--</div>-->
+
+    <!--<div class="form-group col-md-3">-->
+      <!--<label for="inputprix">Prix</label>-->
+      <!--<input type="number" class="form-control" [id]="'inputprix'+i" placeholder="{{'home.priceeur' | translate}}" [(ngModel)]="modele[i].prix" name="price{{i}}" required >-->
+    <!--</div>-->
+    <!--<div class="form-group col-md-1">-->
+      <!--<label for="inputprix">{{'home.quantity' | translate}}<br/></label>-->
+      <!--<input type="number" class="form-control" [id]="'inputquant'+i" placeholder="{{'home.quantity' | translate}}" [(ngModel)]="modele[i].quantity" name="quantity{{i}}" required>-->
+    <!--</div>-->
+    <!--<div class="form-row" style="display: contents">-->
+      <!--<div class="col-md-6">-->
+        <!--<h4 class="box-title">Numero de commande</h4>-->
+        <!--<input type="text" class="form-control" placeholder="Order Number" [(ngModel)]="modele[i]['order_number']"  name="order" [disabled]="idem && i!=0">-->
+      <!--</div>-->
+      <!--<div class="col-md-6" *ngIf="i == 0" >-->
+        <!--<h4 class="box-title">Idem pour tous les items</h4>-->
+        <!--<label class="switch">-->
+          <!--<input type="checkbox" placeholder="Order Number" [(ngModel)]="idem"  name="label" (change)="switchIdem()">-->
+          <!--<span class="slider round"></span>-->
+        <!--</label>-->
+      <!--</div>-->
+    <!--</div>-->
+
+  <!--</form>-->
+      </ng-container>
+      <div class="flex col-md-12" >
+        <a tabindex class="" type="" style="margin-left:auto;" (click)="addItem()"><i class="fas fa-plus-circle" style="margin-right:5px"></i>Ajouter un autre item</a>
+      </div>
+    </div>
+  </div>
+
+</form>
+  <div class="flex col-md-12" style="margin-bottom: 0;padding-bottom:20px">
+    <button style="margin-left:auto; margin-right: auto;font-size: x-large" type="button" class="btn btn-success badge-complete" (click)="sendReceipt()" [disabled]="sendable()">Importer la facture</button>
+  </div></div>
+
+<div *ngIf="onWait" class="opacitor">
+  <div class="lds-facebook"><div></div><div></div><div></div></div>
+</div>
+

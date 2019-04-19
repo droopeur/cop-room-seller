@@ -1,0 +1,228 @@
+<div [ngClass]="{'container' : id}">
+  <div [ngClass]="{'card' : id}">
+    <div  [ngClass]="{'card-body' : id}">
+
+
+
+<h2 class="fiche-title">{{fiche['modele']}}</h2>
+<h3 class="fiche-subtitle">{{fiche['size']}} - {{fiche['prix']}}</h3>
+<span class="transac-badge">{{getTransaction(fiche)}}</span>
+<!--<h4 style="color:black;padding-top: 0;" *ngIf="fiche['type']=='cash receipt'">Shop invoice </h4>-->
+<!--<button *ngIf="fiche['paid']!== undefined" class="btn-warning badge badge-complete" style="margin-left:auto;margin-right:10px" (click)="markAsPaid(fiche)"><i class="fas fa-money-check-alt"> Paid</i></button>-->
+<!--<button class="btn-warning badge badge-complete" style="margin-left:auto;margin-right:10px" (click)="duplicate(fiche)"><i class="fas fa-copy"></i> Duplicate</button>-->
+<div class="row row-choice" *ngIf="fiche['transaction']!='invoice'">
+  <!--<div [ngClass]="{'col-md-8': !fiche['auth'], 'col-md-2': fiche['auth']}">-->
+  <button class="choice-btn first activated" (click)="changeStatus(fiche,'auth')" [disabled]="fiche['auth']" [ngClass]="{'activated': !fiche['auth']}"><span>Mark as authentified<i class="fas fa-chevron-circle-right"></i></span> </button>
+  <!--</div>-->
+  <!--<div [ngClass]="{'col-md-8': fiche['auth'] && !fiche['paid'], 'col-md-2': !fiche['auth'] || fiche['ship']}">-->
+  <button class="choice-btn second" [disabled]="!fiche['auth']"  (click)="changeStatus(fiche,'paid')" [ngClass]="{'activated': fiche['auth'] && !fiche['paid']}"><span>Mark as paid <i class="fas fa-chevron-circle-right"></i></span> </button>
+  <!--</div>-->
+  <!--<div [ngClass]="{'col-md-8': fiche['auth'] && fiche['paid'] && !fiche['ship'], 'col-md-2': fiche['ship']}">-->
+  <!--<button *ngIf="fiche['order_number']!=='N'" class="choice-btn third"  (click)="changeStatus(fiche,'ship')" [disabled]="!fiche['auth'] || !fiche['paid'] || fiche['ship']"[ngClass]="{'activated': fiche['auth'] && fiche['paid'] && !fiche['ship']}"><span>Mark as shipped <i class="fas fa-chevron-circle-right"></i></span> </button>-->
+  <button *ngIf="fiche['order_number']==='N'" class="choice-btn third"  (click)="ngxSmartModalService.open('arrivedModal')" [disabled]="!fiche['auth'] || !fiche['paid'] || fiche['inventory']" [ngClass]="{'activated': fiche['auth'] && fiche['paid'] && !fiche['inventory']}"><span>Put in inventory <i class="fas fa-chevron-circle-right"></i></span> </button>
+  <div class="last-choice" *ngIf="fiche['order_number']==='N'" [ngClass]="{'activated': fiche['auth'] && fiche['paid'] && fiche['inventory']}" ><i class="fas fa-box"></i>In inventory</div>
+  <div class="last-choice" *ngIf="fiche['order_number']!=='N'" [ngClass]="{'activated': fiche['auth'] && fiche['paid'] }" ><i class="fas fa-box"></i>Shipped to client</div>
+
+  <!--</div>-->
+</div>
+<div class="row row-choice" *ngIf="fiche['transaction']=='invoice'">
+  <!--<div [ngClass]="{'col-md-8': !fiche['auth'], 'col-md-2': fiche['auth']}">-->
+  <button class="choice-btn first activated" (click)="changeStatus(fiche,'paid')" [disabled]="fiche['paid']" [ngClass]="{'activated': !fiche['paid']}"><span>Mark as paid<i class="fas fa-chevron-circle-right"></i></span> </button>
+  <!--</div>-->
+  <!--<div [ngClass]="{'col-md-8': fiche['auth'] && !fiche['paid'], 'col-md-2': !fiche['auth'] || fiche['ship']}">-->
+  <button class="choice-btn second" [disabled]="!fiche['paid']"  (click)="changeStatus(fiche,'auth')" [ngClass]="{'activated': !fiche['auth'] && fiche['paid']}"><span>Mark as authentified <i class="fas fa-chevron-circle-right"></i></span> </button>
+  <!--</div>-->
+  <!--<div [ngClass]="{'col-md-8': fiche['auth'] && fiche['paid'] && !fiche['ship'], 'col-md-2': fiche['ship']}">-->
+  <!--<button class="choice-btn third" *ngIf="fiche['order_number']!=='N'"  (click)="changeStatus(fiche,'ship')" [disabled]="!fiche['auth'] || !fiche['paid'] || fiche['ship'] "[ngClass]="{'activated': fiche['auth'] && fiche['paid'] && !fiche['ship']}"><span>Mark as shipped <i class="fas fa-chevron-circle-right"></i></span> </button>-->
+
+  <button *ngIf="fiche['order_number']==='N'" class="choice-btn third"  (click)="ngxSmartModalService.open('arrivedModal')" [disabled]="!fiche['auth'] || !fiche['paid'] || fiche['inventory']"[ngClass]="{'activated': fiche['auth'] && fiche['paid'] && !fiche['inventory']}"><span>Put in inventory<i class="fas fa-chevron-circle-right"></i></span> </button>
+  <div class="last-choice" *ngIf="fiche['order_number']==='N'" [ngClass]="{'activated': fiche['auth'] && fiche['paid'] && fiche['inventory']}" ><i class="fas fa-box"></i>In inventory</div>
+  <div class="last-choice" *ngIf="fiche['order_number']!=='N'" [ngClass]="{'activated': fiche['auth'] && fiche['paid'] }" ><i class="fas fa-box"></i>Shipped to client</div>
+
+  <!--</div>-->
+</div>
+
+<div>
+  <h4>Order Number:</h4>
+
+  <div class="input-group mb-2 col-md-4 no-pad" style="padding:0">
+    <div class="input-group-prepend">
+      <div class="input-group-text"><i class="fab fa-slack-hash"></i></div>
+    </div>
+    <input type="text" class="form-control no-bord form-ordernb" id="inlineFormInputGroup" placeholder="Order Number" [(ngModel)]="fiche['order_number']" name="ngModel" (change)="updateFiche(fiche)">
+  </div>
+
+</div>
+<div class="row no-pad" style="margin-bottom: 0 !important;
+    display: inline-flex;
+    width: 100%;
+    margin: 0 !important;">
+  <a class="btn fiche-btn" *ngIf="fiche['shipment']" [href]="fiche['shipment']['track']['public_url']" target="_blank">Tracking</a>
+  <div class="input-group mb-2 col-md-4 no-pad" style="padding: 0;
+    margin: 0 !important;
+    margin-right: 10px !important;" *ngIf="!fiche['shipment']">
+    <div class="input-group-prepend">
+      <div class="input-group-text" style="    background-color: #8C76F2;
+    color: white;"><i class="fas fa-truck"></i></div>
+    </div>
+    <input type="text" class="form-control no-bord form-ordernb" id="inlineFormInputGroup3" placeholder="Tracking" [(ngModel)]="fiche['tracking']" name="ngModel" (change)="updateFiche(fiche)">
+  </div>
+  <button class="btn fiche-btn"  (click)="fichePrinter.downloadAsPDF(fiche)" >Download</button>
+  <button class="btn fiche-btn"  (click)="fichePrinter.printToCart(fiche['type'], fiche)">Print</button>
+</div>
+<div class="detail">
+  <h4>Vendeur<span class="pro-badge"  [ngClass]="{'pro': fiche['type']=='cash receipt', 'notpro': fiche['type']!='cash receipt'}"></span></h4>
+  <p>{{fiche['prenom']}} {{fiche['nom']}}</p>
+  <p>{{fiche['id_type']}} N°{{fiche['id']}} - {{fiche['id_nat']}}</p>
+</div>
+
+<div class="detail">
+  <h4>Payement <span class="paid-badge"  [ngClass]="{'paid': fiche['paid'], 'unpaid': !fiche['paid']}"></span></h4>
+  <ng-container *ngIf="fiche['iban']">
+    <p>Bank Transfert</p>
+    <p>Iban: {{fiche['iban']}}</p>
+    <p>Beneficiaire: {{fiche['beneficiaire']}}</p>
+
+    <p>{{fiche['mail_virt']}}</p>
+  </ng-container>
+  <ng-container *ngIf="fiche['mail_paypal'] && fiche['payement']!=='Especes'">
+  <p>Paypal - {{fiche['transaction']}}</p>
+  <p>{{fiche['mail_paypal']}}</p>
+</ng-container>
+  <ng-container *ngIf="fiche['payement']=='Especes'">
+    <p>Especes - {{fiche['transaction']}}</p>
+
+  </ng-container>
+</div>
+<div class="detail hist" *ngIf="fiche['type']=='cash receipt'">
+  <h4>Receipt</h4>
+  <div class="form-group"  style="display: flex;
+  justify-content: space-between !important;">
+    <a  *ngIf="fiche['receipt_url']" [href]="fiche['receipt_url']" target="_blank">Receipt image</a>
+    <div class="input_file">
+      <label for="file" class="file_label">
+        <i class="fa fa-upload" aria-hidden="true"></i>
+        Change the image
+      </label>
+      <input id="file" type="file" name="file" multiple (change)="upload($event,fiche)" accept=".png,.jpg,.jpeg,.pdf" />
+    </div>
+  </div>
+  <div class="progress-box progress-2" *ngIf="this.progress">
+    <h4 class="por-title" *ngIf="!downloadUrl">Upload progress</h4>
+    <h4 class="por-title two" *ngIf="!!downloadUrl">Justificatif uploadé</h4>
+    <div class="progress mb-2" style="height: 5px;">
+      <div [class]="'progress-bar bg-flat-color-2 '+!!downloadUrl" role="progressbar" [style.width]="progress" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+  </div>
+</div>
+<div class="detail hist">
+  <h4 (click)="opened.hist= !opened.hist">Historique<span><i class="fas fa-chevron-down" ></i></span></h4>
+  <ul class="hist-list" *ngIf="opened.hist">
+    <li> Fiche Generated: <span style="color:brown">{{fiche['employee']}}</span></li>
+    <li> Fiche Fulfilled: <span style="color:brown">{{fiche['date']}}</span></li>
+    <ng-container *ngIf="fiche['transaction']!='invoice'">
+      <li *ngIf="fiche['auth'] && fiche['auth']['date'] && fiche['auth']['date']['seconds']">Authentified : <span style="color:brown">{{fiche['auth']['employee']}}- {{fiche['auth']['date'].toDate() | date}}</span></li>
+      <li *ngIf="fiche['paid'] &&  fiche['paid']['date'] && fiche['paid']['date']['seconds']" >Paid : <span style="color:brown">{{fiche['paid']['employee']}}- {{fiche['paid']['date'].toDate() | date}}</span></li>
+      <li *ngIf="fiche['ship']  && fiche['order_number']!='N'" >Shipped : <span style="color:brown">{{fiche['ship']['employee'] }}- {{fiche['ship']['date'].toDate() | date}}</span></li>
+    </ng-container>
+    <ng-container *ngIf="fiche['transaction']=='invoice'">
+      <li *ngIf="fiche['paid'] && fiche['paid']['date'] && fiche['paid']['date']['seconds']" >Paid : <span style="color:brown">{{fiche['paid']['employee']}}- {{fiche['paid']['date'].toDate() | date}}</span></li>
+      <li *ngIf="fiche['auth']  && fiche['auth']['date'] && fiche['auth']['date']['seconds']">Authentified : <span style="color:brown">{{fiche['auth']['employee']}}- {{fiche['auth']['date'].toDate() | date}}</span></li>
+      <li *ngIf="fiche['ship'] && fiche['order_number']!='N'"  >Shipped : <span style="color:brown">{{fiche['ship']['employee']}}- {{fiche['ship']['date'].toDate() | date}}</span></li>
+    </ng-container>
+    <ng-container *ngIf="fiche['inventory']" >
+      <li>Arrived at: <span style="color:brown">{{fiche['inventory']['arrived']['seconds']*1000 | date:'dd/MM/yyyy H:mm'}}</span></li>
+      <li>Checked by: <span style="color:brown">{{fiche['inventory']['employee']}}</span></li>
+      <li>Category: <span style="color:brown">{{fiche['inventory']['category']}}</span></li>
+    </ng-container>
+
+  </ul>
+</div>
+
+
+<div class="detail">
+  <div class="input-group mb-2 col-md-12 no-pad" style="padding:0;margin-top:20px">
+    <div class="input-group-prepend">
+      <div class="input-group-text" style="font-family: inherit; font-weight: bold">Note:</div>
+    </div>
+    <input type="text" class="form-control no-bord form-ordernb" id="inlineFormInputGroup2" placeholder="Note" [(ngModel)]="fiche['police_number']" name="ngModel" (change)="updateFiche(fiche)">
+  </div>
+</div>
+
+<div class="detail hist">
+  <h4 (click)="opened.modif= !opened.modif">Modifications<span><i class="fas fa-chevron-down" ></i></span></h4>
+  <ng-container *ngIf="opened.modif">
+    <div class="input-group mb-2 col-md-12 no-pad" style="padding:0;margin-top:20px">
+      <div class="input-group-prepend">
+        <div class="input-group-text" style="font-family: inherit; font-weight: bold">Date:</div>
+      </div>
+      <input type="date" class="form-control no-bord form-ordernb" id="inlineFormInputGroup4" placeholder="Note"  (change)="changeDate(fiche,$event.target.value)" name="ngModel" >
+    </div>
+    <h3 style="color:black; display: flex;font-weight: bold"><b class="col-md-1" style="margin:auto 0;padding:0 ">Nom:</b>
+      <div class="col-md-5"><input type="text" class="form-control " required [(ngModel)]="fiche['nom']"
+                                   #expi="ngModel" name="date_expire"
+                                   (change)="updateFiche(fiche)"/>
+      </div>
+      <div class="col-md-5" *ngIf="fiche['prenom']">
+        <input type="text" class="form-control col-md-5" required [(ngModel)]="fiche['prenom']" #expi="ngModel" name="date_expire" (change)="updateFiche(fiche)"/>
+      </div>
+    </h3>
+    <div class="form-group"><label for="vat" class=" form-control-label">Modele & Size</label>
+      <div class="form-row">
+        <input type="text" class="form-control col-md-9" required [(ngModel)]="fiche['modele']"
+               #expi="ngModel" name="date_expire"
+               (change)="updateFiche(fiche)"/>
+
+        <input type="text" class="form-control col-md-3" required [(ngModel)]="fiche['size']" #expi="ngModel"
+               name="date_expire" (change)="updateFiche(fiche)"/> {{fiche['color']}}
+      </div>
+    </div>
+    <div class="form-group"><label for="street" class=" form-control-label">Prix</label>
+      <input type="text" class="form-control" required [(ngModel)]="fiche['prix']"
+             #fichp="ngModel" name="date_expire"
+             (change)="updateFiche(fiche)"/>
+    </div>
+    <div class="row form-group">
+      <div class="col-8">
+        <div class="form-group"><label for="city" class=" form-control-label">Type de payement</label>
+          <select class="form-control" required [(ngModel)]="fiche['payement']" (change)="updateFiche(fiche)">
+            <option value="Paypal">Paypal</option>
+            <option value="Virement">Virement</option>
+            <option value="Especes">Especes </option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger badge-alert" data-dismiss="modal" (click)="delete(fiche['objectID'])">Delete</button>
+
+  <button type="button" class="btn btn-primary badge-all" data-dismiss="modal" (click)="ngxSmartModalService.close('myModal')" *ngIf="id">Close</button>
+</div>
+    </div>
+  </div>
+</div>
+<app-fiche-printer #fichePrinter [fiche]="fiche"></app-fiche-printer>
+<ngx-smart-modal #arrivedModal identifier="arrivedModal">
+
+  <h2 class="modal-title" style="margin-bottom:1.5em">Mark as Arrived in stock</h2>
+  <p style="color:black"><b>Modele:</b> {{fiche['modele']}} - {{fiche['size']}}</p>
+  <p style="color:black"><b>Envoye par:</b> {{fiche['nom']}} {{fiche['prenom']}}</p>
+  <p style="color:black"><b>Category:</b></p>
+  <select type="text" class="form-control" required [(ngModel)]="category">
+    <option value="Yeezy">Yeezy</option>
+    <option value="Off White">Off white</option>
+    <option value="Jordan">Jordan</option>
+    <option value="Nike">Nike</option>
+    <option value="Adidas">Adidas</option>
+    <option value="Supreme">Supreme</option>
+
+    <option value="Other">Other</option></select>
+  <div class="modal-footer">
+    <button type="button" class="btn  btn-info badge-pending" style="margin-left:auto" (click)="markAsArrived(fiche,category)" [disabled]="!category">Mark as arrived
+    </button>
+  </div>
+</ngx-smart-modal>

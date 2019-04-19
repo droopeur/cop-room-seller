@@ -1,18 +1,18 @@
 {
   "home": {
-    "title": "Sales Form for individual sellers",
+    "title": "Sales form for private collectors and sellers",
     "type": "Transaction type",
     "dco": "Direct sale",
     "cons": "Consignment",
     "fname": "First name",
     "lname": "Last name",
-    "model": "Model (only one item per row, add line for each item)",
+    "model": "Item name",
     "addmodel": "Add Another Item",
-    "price": "Price (ONLY NUMBERS)",
+    "price": "Price ",
     "priceeur": "Price (in euro)",
     "payment": "Payment Choice",
     "id": "ID Card Number",
-    "certif1": "By accepting the terms and conditions I certify that I am more than 18 years old and that my product(s) is/are genuine, not stolen, swindled, borrowed. I hold myself responsible for authenticity, conformity (no defects), origin of it.",
+    "certif1": "By accepting Coproom's general terms and conditions of purchase, I certify that this product is authentic, that it has not been stolen, swindled or borrowed. I am responsible for the authenticity, conformity, provenance and that the object is free from defects. I certify that the item is not stolen and/or has not been acquired fraudulently. I certify that I am over 18 years of age.",
     "certif2":"I, the undersigned, declare on the honor the sale of this object and the veracity of this declaration.",
     "certif3":"",
     "send": "Send",
@@ -30,13 +30,14 @@
     "mailppl": "Paypal account email. We will send payment to this email please be carefull",
     "beneficiaire": "Beneficiary (Full name)",
     "iban": "Iban",
-    "idExp": "(Mandatory because we are a company / If number is not correct we will cancel the sale)",
-    "top-text": "All informations are strictly confidential. If any information (name, ID number, ect...) is false we will have the right to cancel the sale.",
+    "idExp": "(Mandatory because we are a company: if number is not correct we will cancel the sale)",
+    "top-text": "All informations are strictly confidential.",
     "cheque": "Check",
-    "bottom-text-1":" This is a sale contract between you and the company ROOM GROUP SAS. Details about our company are available on ",
-    "bottom-text-2":" and sale terms are available on this ",
-    "bottom-link": "link",
+    "bottom-text-1":"This is a sales contract between you and ROOM GROUP SAS. Details about the company are available on ",
+    "bottom-text-2":" and the conditions of purchase of Coproom ",
+    "bottom-link": "here",
     "quantity": "Quantity",
+    "accept-2": " I guarantee to honor the sale without any cancelation possibility for any reason and I accept ",
     "fillform": "You must fill correctly all the required fields before being able to submit the form",
     "infos": {
       "seller": "Seller infos",
@@ -44,9 +45,116 @@
       "items": "Items infos"
 
     },
-    "accept": "I, the undersigned, declare on the honor the sale of this object and the veracity of this declaration. I accept without reserve the ",
-    "terms": "buying terms and conditions",
+    "accept": "I guarantee to honor the sale without any possible cancelation for any reason and I guarantee that items are authentic, brand new, with original packaging. ",
+    "terms": "terms and conditions of selling to Coproom.",
     "color": "Item color",
-    "size": "Item size"
+    "size": "Item size",
+    "mailvirt": "Email (we will send you a notification once the bank transfer will be done)",
+    "why_info": "Why are those informations required by CopRoom ?",
+    "why_info_protected": "Are my informations protected?",
+    "rgpd_exp": "As Coproom is very concerned about your informations: all informations are protected by GDPR european agreement concerning security, confidentiality and protection of your informations. Coproom will never use or share any of your information for any reason.",
+    "id_exp": "Coproom asks for your name, surname and ID number to be able to justify that the products you are selling to us are not stolen.",
+    "transaction": {
+      "title": "Transaction",
+      "method": "Choose the transaction method you prefer",
+      "gift": "Ship then get paid (save fees)",
+      "invoice": "Get paid then ship (get paid now)",
+      "dropoff" :"Drop-off and get paid at the same time (for Paris, France local sellers)"
+    }
+  },
+  "shipping": {
+    "title": "Ship your items to coproom !",
+    "top-text": "All information is strictly confidential. They are only used to generate your shipping label to send your package to Coproom.",
+    "address-label": "Address",
+    "email-label": "Email (shipping label and instructions will be send to this email",
+    "name-label":"Full name",
+    "name": "Full name",
+    "phone": "Phone number",
+    "phone-label": "Phone number (for DHL to reach you)",
+    "item-number": "Number of items in the parcel",
+    "item-number-1": "Only one Item",
+    "item-number-2": "More than one item",
+    "dimension": "Dimension of the parcel in ",
+    "dimension-cm":"centimeters",
+    "height":"height",
+    "length": "length",
+    "width": "width",
+    "weight-label": "Weight in",
+    "weight-gr": "grams",
+    "weight": "weight in grams",
+    "address-1": "Number and street",
+    "address-2":"Address complement",
+    "city": "City / Town",
+    "state": "State / Province / Region",
+    "zip": "Zip code",
+    "country": "Country",
+    "country-select": "(please select a country)",
+    "submit": "Generate shipping label",
+    "res-1": "Your shipping label and the instructions has been sent to your email.",
+    "res-2": "Please check your email and spam folder.",
+    "res-3": "You may not receive it immediately, please wait up to 10 minutes."
+
+
+  },
+  "result": {
+    "title": "Thanks for selling to Coproom",
+    "subtitle" : {
+      "1": "Your form was successfully submitted.",
+      "2": "Don't forget, you can sell, or put in consigmnent other items directly on "
+    },
+    "reduction" : "Get 10e off all website by using our special cop code ",
+    "alert" : "You must ship or dropoff within 2 business days unless it has been decided otherwise with a Coproom employee.",
+    "follow": "follow us on instagram",
+    "shipping": "Please dropoff your items to 77 rue de prony 75017 Paris on the agreed date by notifying by facebook message or sms at 06 71 50 41 48."
+  },
+  "transac": {
+    "gift": {
+      "title_1" : "1. Fill the form",
+      "text_1": "Once submitted, deal will be confirmed and you will not be able to cancel for any reason.",
+      "title_2": "2. Ship your item(s) to us",
+      "text_2": "You can use Coproom shipping method below or your own shipping method (please only use your national post, DHL or UPS).",
+      "title_3": "3. Get paid",
+      "text_3": "As soon as we receive and authenticate your item(s) you will get paid through paypal payout or bank transfer without any transaction fees."
+    },
+    "invoice": {
+      "title_1" : "1. Fill the form",
+      "text_1": "Once submitted, deal will be confirmed and you will not be able to cancel for any reason.",
+      "title_2": "2. Get paid",
+      "text_2": "As soon as we receive your PayPal invoice, you will instantly be paid ",
+      "title_3": "3. Ship your item(s) to us",
+      "text_3": "You can use the Coproom shipping label below or your own shipping method (please only use your national post, DHL or UPS).      ",
+      "small_before": "(please note that ",
+      "small_in": "PayPal fees",
+      "small_after": " depending your PayPal account type and location)."
+    },
+    "dropoff": {
+      "title_1" : "1. Fill the form",
+      "text_1": "Once submitted, deal will be confirmed and you will not be able to cancel for any reason.",
+      "title_2": "2. Bring your item(s) to us",
+      "text_2": "  Bring your item(s) at Coproom headquarter in Paris 17e.",
+      "title_3": "3. Get paid",
+      "text_3": "You will instantly be paid during the drop off through paypal payout or bank transfer without any transaction fees."
+    },
+    "shipping": {
+      "title": "Coproom Shipping",
+      "text_1": " This will generate a dhl shipping label that you can use to ship your items to Coproom. It’s fast  (24h) and easy, saving you time and money.",
+      "text_2": " It will cost you ",
+      "text_3": "per items, that is",
+      "france": "If you ship from France or if you are selling more than 8 items, shipping price will automatically be lowered.",
+      "my_ship": "No thanks, I would like to ship the item by my own."
+    },
+    "verif": {
+      "not_dropoff": "I guarantee that items are authentic, brand new, with original packaging and that I will ship them double boxed within 48 hours",
+      "team": "(unless it has been decided otherwise with a member of the Coproom team).",
+      "dropoff": "I guarantee that items are authentic, brand new, with original packaging and that I will respect drop-off date."
+    }
+  },
+  "recap":{
+    "label": "Review",
+    "title": "Review of your sale:",
+    "subtitle": "You will be paid:",
+    "method": "Payment method:",
+    "payout": "payout (no fees)"
   }
+
 }

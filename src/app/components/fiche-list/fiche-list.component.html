@@ -1,0 +1,341 @@
+<div class="container col-lg-12">
+  <div class="card">
+    <div class="row card-body" style="padding-right:0;padding-bottom: 0;">
+      <div class="col-lg-6">
+        <div class="input-group mb-3">
+
+          <i class="fas fa-search"></i> <input type="text" class="form-control" placeholder="Prénom nom item"
+                                               [(ngModel)]="searchInput"
+                                               (ngModelChange)="valueChange($event)" #search="ngModel" name="search">
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="input-group mb-2">
+
+          <input type="text" class="form-control" placeholder="Commande" [(ngModel)]="RepsearchInput"
+                 (ngModelChange)="valueChangeRep($event)" #search="ngModel" name="search">
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="input-group mb-3">
+
+          <input type="text" class="form-control" placeholder="Iban / Mail ppl" [(ngModel)]="RepsearchInputPay"
+                 (ngModelChange)="valueChangePay($event)" name="search">
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="input-group mb-3">
+
+          <input type="text" class="form-control" placeholder="Note" [(ngModel)]="RepsearchInputNote"
+                 (ngModelChange)="valueChangeNote($event)" name="search">
+        </div>
+      </div>
+
+    </div>
+    <div class="row card-body" style="padding-top:0;padding-bottom: 0">
+      <div class="col-md-2" style="margin-bottom:10px">
+
+        <div class="row">
+
+          <div class="col-12" style="display: flex">
+            <i class="fas fa-filter"></i>
+
+            <span [class]="'badge badge-all '+isSelected('all','none')"
+                  (click)="filter.type='none';filter.order_number='none';filter.payement = 'none'; toDate= undefined; fromDate = undefined;filter.invoice ='none'; ficheService.resetFiches()">No filter</span>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2" style="margin-bottom:10px; ">
+        <div class="row" style="display: -webkit-box">
+
+          <!--<div class="pd-5 pd-15-lt" >-->
+
+          <!--<span [class]="'badge badge-complete '+isSelected('order_number', 'none')" (click)="filter.order_number='none';  getSearchResults()">All</span>-->
+
+          <!--</div>-->
+          <div class="col-12" style="display: flex">
+            <div class="pd-5" style="padding-left:0">
+              <span [class]="'badge badge-complete '+isSelected('order_number', 'S')"
+                    (click)="filter.order_number='S';   setFilter('order_number', 'S');">S</span>
+            </div>
+            <div class="pd-5">
+              <span [class]="'badge badge-complete '+isSelected('order_number', 'BT')"
+                    (click)="filter.order_number='BT';  setFilter('order_number', 'BT')">BT</span>
+            </div>
+            <div class="pd-5">
+              <span [class]="'badge badge-complete '+isSelected('order_number', 'N')"
+                    (click)="filter.order_number='N';   setFilter('order_number', 'N')">N</span>
+
+            </div>
+            <!--<div class="pd-5">-->
+            <!--<span [class]="'badge badge-complete '+isSelected('order_number', 'PP')" (click)="filter.order_number='PP';  getSearchResults()">PP</span>-->
+            <!--</div>-->
+
+
+            <!--<div class="pd-5">-->
+            <!--<span [class]="'badge badge-complete '+isSelected('order_number', 'D')" (click)="filter.order_number='D';  getSearchResults()">D</span>-->
+
+            <!--</div>-->
+            <div class="pd-5">
+              <span [class]="'badge badge-alert '+isSelected('order_number', 'no order')"
+                    (click)="filter.order_number='no order';setFilter('order_number', undefined)">?</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-2" style="margin-bottom:10px">
+        <div class="row" style="display: -webkit-box">
+          <div class="col-12" style="display: flex">
+
+            <div class="pd-5" style="padding-left:0">
+              <span [class]="'badge badge-pending '+isSelected('type', 'direct cash out')"
+                    (click)="filter.type='direct cash out'; setFilter('type', 'cash receipt', true)">Private</span>
+            </div>
+            <div class="pd-5">
+              <span [class]="'badge badge-pending '+isSelected('type', 'cash receipt')"
+                    (click)="filter.type='cash receipt'; setFilter('type', 'cash receipt')">Pro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4" style="margin-bottom:10px">
+        <div class="row" style="display: -webkit-box">
+          <div class="col-12" style="display: flex; max-height:34px">
+            <div class="pd-5" style="padding-left:0">
+              <div class="dropdown">
+                <button style="color:black" class="badge dropdown-toggle dpd" type="button" id="dropdownMenuButtonPay"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <ng-container *ngIf="filter.payement=='none'; else payement">Payement</ng-container>
+                  <ng-template #payement>{{filter.payement}}</ng-template>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a *ngFor="let method of ficheService.getValueList('payement')" class="dropdown-item"
+                     (click)="filter.payement=method; setFilter('payement', method)">{{method}}</a>
+                  <a class="dropdown-item" (click)="filter.payement='none'; setFilter('payement', '')">All</a>
+
+                </div>
+              </div>
+            </div>
+            <div class="pd-5">
+
+              <div class="dropdown">
+                <button style="color:black" class="badge dropdown-toggle dpd" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <ng-container *ngIf="filter.employee=='none'; else employee">Employee</ng-container>
+                  <ng-template #employee>{{filter.employee.split(' ')[0]}}</ng-template>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a *ngFor="let emp of ficheService.getValueList('employee')" class="dropdown-item"
+                     (click)="filter.employee=emp; setFilter('employee', emp)">{{emp.split(' ')[0]}}</a>
+                  <a class="dropdown-item" (click)="filter.employee='none'; setFilter('employee', '')">All</a>
+
+                </div>
+              </div>
+            </div>
+            <div class="pd-5">
+
+              <div class="dropdown">
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <ngb-datepicker class="form-control" placeholder="yyyy-mm-dd"
+                                      name="dp" ngbDatepicker #d="ngbDatepicker" (select)="onDateSelection($event)"
+                                      [dayTemplate]="t" [hidden]="datehide">
+                      </ngb-datepicker>
+                      <ng-template #t let-date let-focused="focused">
+  <span class="custom-day"
+        [class.focused]="focused"
+        [class.range]="isRange(date)"
+        [class.faded]="isHovered(date) || isInside(date)"
+        (mouseenter)="hoveredDate = date"
+        (mouseleave)="hoveredDate = null">
+    {{ date.day }}
+  </span>
+                      </ng-template>
+                      <div class="input-group-append">
+                        <button class="badge dropdown-toggle dpd" style="color:black" (click)="datehide = !datehide"
+                                type="button">Date <i class="fas fa-calendar-alt"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1" style="margin-bottom:10px">
+        <div class="row">
+          <div class="col-12" style="display:flex">
+            <div class="pd-5" style="padding-left:0">
+          <span [class]="'badge badge-alert '+isSelected('invoice', 'true')"
+                (click)="filter.invoice='true';  setFilter('type', 'cash receipt'); setFilter('receipt_url',undefined)">No invoice</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="card-body--">
+      <hr style="margin-bottom:0"/>
+      <div class="table table-stats order-table ov-h" style="overflow-x: hidden">
+
+        <table style="height:550px;    overflow-y: scroll;
+    display: block;
+    overflow-x: hidden;" class="table table-hover " [mfData]="fiches" #mf="mfDataTable" [mfRowsOnPage]="40"
+               [mfSortBy]='"timed_date"' [mfSortOrder]="'desc'">
+          <thead>
+          <tr>
+            <!--<th scope="col">Del</th>-->
+            <th class="dialing hidemob">#</th>
+            <th scope="col" class="col-name">
+              <mfDefaultSorter by="nom">Name</mfDefaultSorter>
+            </th>
+            <!--<th scope="col "><i class="fas fa-envelope"></i></th>-->
+
+            <th scope="col" class="hidemob">
+              <mfDefaultSorter by="timed_date">Date</mfDefaultSorter>
+            </th>
+            <!--<th scope="col">  <mfDefaultSorter by="type">Type</mfDefaultSorter></th>-->
+            <th scope="col" class="col-model">
+              <mfDefaultSorter by="modele">Item</mfDefaultSorter>
+            </th>
+            <th scope="col">
+              <mfDefaultSorter by="prix" class="col-price">Prix</mfDefaultSorter>
+            </th>
+            <th scope="col" class="hidemob">Print</th>
+            <th scope="col" class="hidemob">Dl</th>
+
+            <th scope="col">
+              <mfDefaultSorter by="order_number">Order</mfDefaultSorter>
+            </th>
+            <!--<th scope="col"><mfDefaultSorter by="paid" (click)="keepPaid()" >Paid</mfDefaultSorter></th>-->
+            <!--<th scope="col">-->
+            <!--<mfDefaultSorter by="police_number">Note</mfDefaultSorter>-->
+            <!--</th>-->
+            <th scope="col">
+              <mfDefaultSorter by="police_number" class="hidemob">Note</mfDefaultSorter>
+            </th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let fiche of mf.data,let i=index">
+            <tr *ngIf="!fiche.hide" [class]="'table-row '+checkBg(fiche)">
+              <!--<td>-->
+              <!--<button class="btn btn-sm btn-danger" (click)="openDelete(fiche.objectID)"><i-->
+              <!--class="fas fa-trash"></i></button>-->
+              <!--</td>-->
+              <td class="dialing hidemob">{{i + 1}}</td>
+
+              <td scope="row" (click)="getInfos(fiche)" class="col-name">{{fiche['nom']}} {{fiche['prenom']}}</td>
+              <!--<td><button *ngIf="fiche['mail_paypal']" class="btn btn-sm btn-info" (click)="openMailModal(fiche)"><i class="fas fa-envelope"></i></button></td>-->
+              <!---->
+              <td (click)="getInfos(fiche)" class="hidemob">
+                <!--<input type="text" class="form-control" required [(ngModel)]="fiche['date']"-->
+                <!--#expi="ngModel" name="date_expire"-->
+                <!--(change)="changeDate(fiche,$event.target.value)"/>-->
+                {{fiche['date'].toDateString() | slice:0:10}}
+              </td>
+              <!--<td>{{fiche['type']}}</td>-->
+
+              <td (click)="getInfos(fiche)" class="col-model">
+                <!--<input type="text" class="form-control" required [(ngModel)]="fiche['modele']"-->
+                <!--#expi="ngModel" name="date_expire"-->
+                <!--(change)="changeModele(fiche,$event.target.value)"/>-->
+
+                <!--<br/> <input type="text" class="form-control" required [(ngModel)]="fiche['size']" #expi="ngModel"-->
+                <!--name="date_expire" (change)="changeSize(fiche,$event.target.value)"/> {{fiche['color']}}-->
+                {{fiche['modele']}} {{fiche['size']}}
+              </td>
+
+              <td (click)="getInfos(fiche)" class="col-price">
+                <!--<input type="text" class="form-control" required [(ngModel)]="fiche['prix']"-->
+                <!--#fichp="ngModel" name="date_expire"-->
+                <!--(change)="changePrice(fiche,$event.target.value)"/>-->
+                {{fiche['prix']}}
+              </td>
+
+              <td class="hidemob">
+                <button class="btn btn-sm btn-info" (click)="fichePrinter.printToCart(fiche['type'], fiche)"><i
+                  class="fas fa-print"></i></button>
+              </td>
+              <td class="hidemob">
+                <button class="btn btn-sm btn-info" (click)="fichePrinter.downloadAsPDF(fiche)"><i
+                  class="fas fa-download"></i>
+                </button>
+              </td>
+
+              <td class="order-col">
+                <form><input [class]="'form-control order-input '+checkColor(fiche)" placeholder="Order nb"
+                             [(ngModel)]="fiche['order_number']" name="ngModel" (change)="updateOrderNumb(fiche)"/>
+                </form>
+              </td>
+              <!--<td><button *ngIf="fiche['paid']!== undefined" class="btn btn-sm btn-warning" (click)="markAsPaid(fiche)"><i class="fas fa-money-check-alt"></i></button>-->
+              <!--</td>-->
+
+              <td class="note hidemob">
+                <input style="" [class]="'form-control'" placeholder="" [(ngModel)]="fiche['police_number']"
+                       name="ngModel" (change)="updatePoliceNumb(fiche)"/></td>
+              <!--<td><input type="checkbox" id="scales" name="scales"-->
+              <!--(change)="changeProcess(fiche)"-->
+              <!--[checked]="fiche.processed"></td>-->
+            </tr>
+          </ng-container>
+
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="4">
+              <mfBootstrapPaginator [rowsOnPageSet]="[40,80,160]"></mfBootstrapPaginator>
+            </td>
+          </tr>
+          </tfoot>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <angular2csv [data]="this.fiches" filename="database" [options]="options"></angular2csv>
+    </div>
+    <br/>
+  </div>
+</div>
+
+<ngx-smart-modal #myModal identifier="myModal" [customClass]="'nsm-dialog-animation-btt'" [hideDelay]="300"
+                 >
+  <app-fiche [fiche]="fiche"></app-fiche>
+</ngx-smart-modal>
+
+<!--<ngx-smart-modal #errorModal identifier="errorModal">-->
+<!--<div class="alert alert-danger" style="margin:-16px">-->
+<!--FORMAT INCORECT-->
+<!--</div>-->
+
+
+<!--</ngx-smart-modal>-->
+<!--<ngx-smart-modal #mailModal identifier="mailModal">-->
+
+<!--<div class="modal-header">-->
+<!--<h2 class="modal-title">Change mail</h2>-->
+<!--</div>-->
+
+<!--<input type="text" class="form-control" required [(ngModel)]="fiche['mail_paypal']"/>-->
+<!--<div class="modal-footer">-->
+<!--<button type="button" class="btn btn-danger" (click)="changeMail()" id="closed" #closed [autofocus]="autofc">Change-->
+<!--mail-->
+<!--</button>-->
+<!--<button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="myModal.close()">Close</button>-->
+<!--</div>-->
+<!--</ngx-smart-modal>-->
+
+<app-fiche-printer #fichePrinter [fiche]="fiche"></app-fiche-printer>

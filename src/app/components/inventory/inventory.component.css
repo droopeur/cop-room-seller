@@ -1,0 +1,99 @@
+.btn.btn-info {
+  background: linear-gradient(90deg, #87e2b5,#73cbc6) !important;
+  box-shadow: 2px 2px 20px 0px rgba(115,203,198,0.5) !important;
+
+}
+
+.green {
+  background-color: rgba(135,226,181,0.1) !important;
+
+}
+
+.td-checkbox{
+  text-align: center;
+}
+
+.category-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  margin-top:0.2em;
+}
+
+.category-list > li {
+   padding:.2em 1em;
+   background: ghostwhite;
+  cursor: pointer;
+ }
+
+.category-list > li.selected {
+  background: white;
+  border-top: 2px solid #73cbc6;
+  font-weight: bold;
+  position: relative;
+  box-shadow: 0px -1px 7px 0px rgba(179,179,179,1);
+
+}
+
+.category-list > li.selected::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  background-color: white;
+  width: 100%;
+  height: 2px;
+  left: 0;
+}
+
+hr {
+  margin-top:0em
+}
+
+
+::ng-deep  .custom-slider .ng5-slider .ng5-slider-bar {
+  background: #ffe4d1;
+  height: 2px;
+}
+::ng-deep .custom-slider .ng5-slider .ng5-slider-selection {
+  background: orange;
+}
+
+::ng-deep .custom-slider .ng5-slider .ng5-slider-pointer {
+  width: 8px;
+  height: 16px;
+  top: auto; /* to remove the default positioning */
+  bottom: 0;
+  background-color: #333;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+::ng-deep .custom-slider .ng5-slider .ng5-slider-pointer:after {
+  display: none;
+}
+
+::ng-deep .custom-slider .ng5-slider .ng5-slider-bubble {
+  bottom: 14px;
+}
+
+::ng-deep .custom-slider .ng5-slider .ng5-slider-limit {
+  font-weight: bold;
+  color: orange;
+}
+
+::ng-deep .custom-slider .ng5-slider .ng5-slider-tick {
+  width: 1px;
+  height: 10px;
+  margin-left: 4px;
+  border-radius: 0;
+  background: #ffe4d1;
+  top: -1px;
+}
+
+::ng-deep .custom-slider .ng5-slider .ng5-slider-tick.ng5-slider-selected {
+  background: orange;
+}
+
+table {
+  scroll-snap-type: both proximity;
+}

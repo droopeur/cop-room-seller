@@ -1,19 +1,19 @@
 {
   "home": {
-    "title": "Formulaire de vente pour particuliers",
+    "title": "Formulaire de vente pour collectionneurs et vendeurs particuliers",
 
     "type": "Type de transaction",
     "dco": "Vente directe",
     "cons": "Depot vente",
-    "fname": "Prenom",
+    "fname": "Prénom",
     "lname": "Nom",
-    "model": "Modele (1 seul item par ligne)",
+    "model": "Nom du produit",
     "addmodel": "Ajouter un autre item",
-    "price": "Prix (que des NOMBRES)",
+    "price": "Prix",
     "priceeur": "Prix (en euro)",
-    "payment": "Methode de reglement",
-    "id": "Numero de carte d'identite",
-    "certif1": "En acceptant les Conditions generales de vente, je certifie que ce produit est authentique, qu’il n'a pas été volé, escroqué, emprunté. Je me tiens responsable de l’authenticité, de la conformité, de la provenance et que l’objet ne comporte pas de défaut.",
+    "payment": "Methode de réglement",
+    "id": "Numero de carte d'identité",
+    "certif1": "En acceptant les conditions générales d’achat de Coproom, je certifie que ce produit est authentique, qu’il n'a pas été volé, escroqué, emprunté. Je me tiens responsable de l’authenticité, de la conformité, de la provenance et que l’objet ne comporte pas de défaut. Je certifie que l'objet n'est pas volé et/ou n'a pas été acquis frauduleusement. Je certifie avoir plus de 18ans.",
     "certif2":"Je soussigné atteste sur l’honneur la vente de cet objet et la véracité de cette déclaration et certifie que j'ai plus de 18 ans.",
     "certif3":"",
     "send": "Envoyer",
@@ -23,20 +23,20 @@
     "succes": "Formulaire envoye avec succes.",
     "fail": "Echec de l'envoi. Reessayez ou contactez nous.",
     "mail": "(Recommandé) Pour rester informé des sorties et des promotions, entrez votre email",
-    "idtype": "Type de carte",
-    "idnat": "Nationalite de la carte d'indentite",
+    "idtype": "Type de pièce d’identité",
+    "idnat": "Nationalité de la carte d'identité",
     "passport": "Passeport",
-    "idcard": "Card Nationale d'indentite",
+    "idcard": "Carte Nationale d'indentite",
     "driverlicence": "Permis de conduire",
     "mailppl": "Email lie au compte Paypal . Le payment sera envoye sur cet email, soyez attentif aux erreurs",
-    "beneficiaire": "Beneficiaire (Nom Complet)",
+    "beneficiaire": "Bénéficiaire (Nom complet)",
     "iban": "Iban",
-    "idExp": "(Obligatoire car nous sommes une societe / Si l'id est incorrect la vente ne pourra pas avoir lieu)",
-    "top-text": "Toutes les informations sont strictement confidentielles. Si l’une des informations (nom, numero d'identité, ect…) est fausse nous nous réservons le droit d’annuler la vente.",
+    "idExp": "(Obligatoire: Si l'id est incorrecte la vente ne pourra pas avoir lieu)",
+    "top-text": "Toutes les informations sont strictement confidentielles.",
     "cheque": "Cheque",
     "bottom-text-1":" Ceci est un contrat de vente entre vous et la société ROOM GROUP SAS. Des détails sur la société sont disponible sur ",
-    "bottom-text-2":" et les conditions de vente ",
-    "bottom-link": "ici",
+    "bottom-text-2":" et les conditions  générales d’achat de Coproom sont disponibles ",
+    "bottom-link": "ici.",
     "quantity": "Quantité",
     "fillform": "Vous devez remplir correctement tout les champs du formulaire avant de pouvoir nous l'envoyer.",
     "infos": {
@@ -45,12 +45,119 @@
       "items": "Produit"
 
     },
-    "accept": "Je soussigné atteste sur l’honneur la vente de cet objet et la véracité de cette déclaration. J'accepte sans réserves les ",
-    "terms": "conditions générales d'achat",
+    "accept": "Je garantis que toutes les informations ci-dessus sont correctes et j'accepte ",
+    "terms": "conditions générales de vente à Coproom",
+    "accept-2": "Je m'engage à honorer la vente sans aucune possibilité d'annulation pour quelque raison que ce soit et j'accepte les",
     "color": "Couleur",
-    "size": "Taille"
+    "size": "Taille du produit",
+    "mailvirt": "E-mail (Afin de recevoir une notification lorsque le virement sera effectué)",
+    "why_info": "Pourquoi Coproom me demande ces informations?",
+    "why_info_protected": "Mes informations sont-elles protégées ?",
+    "rgpd_exp": "Coproom est très concerné par vos informations : toutes les informations sont protégées par la loi européenne RGPD concernant la sécurité, la confidentialité et la protection de vos informations. Coproom n'utilisera ni ne partagera jamais vos informations pour quelque raison que ce soit.",
+    "id_exp": "Coproom vous demande vos nom, prénom et numéro d'identité pour pouvoir justifier que les produits que vous nous vendez ne sont pas volés.",
+    "transaction": {
+      "title": "Transaction",
+      "method": "Choisissez la méthode de transaction que vous souhaitez ",
+      "gift": "Expédiez et soyez payé à la réception (économisez les frais)",
+      "invoice": "Soyez payé, puis expédié (soyez payé maintenant)",
+      "dropoff" :"Déposez votre item et soyez payé en même temps (pour les vendeurs de Paris)"
+    }
 
 
 
+  },
+  "shipping": {
+    "title": "Envoie tes items a Coproom !",
+    "top-text": "Toutes les informations sont strictement confidentielles. Elles servent uniquement à générer votre étiquete d'expédition pour envoyer votre colis à Coproom.",
+    "address-label": "Adresse",
+    "email-label": "Email (l'étiquette d'expédition et les instructions seront envoyées à cet email)",
+    "name-label": "Nom complet",
+    "name": "Nom et prénom",
+    "phone-label": "Numéro de téléphone (pour que DHL puisse vous joindre)",
+    "phone": "Numéro de téléphone",
+    "item-number":"Nombre d'articles dans le colis",
+    "item-number-1": "Un seul article",
+    "item-number-2": "Plus d'un article",
+    "dimension": "Dimension du colis en ",
+    "dimension-cm":"centimètres",
+    "height":"hauteur",
+    "length": "longueur",
+    "width": "largeur",
+    "weight-label": "Poids en ",
+    "weight-gr": "grammes",
+    "weight": "Poids en grammes",
+    "address-1": "Numéro et rue",
+    "address-2":"Complément d'addresse",
+    "city": "Ville",
+    "state": "Etat, province ou région",
+    "zip": "Code Postal",
+    "country": "Pays",
+    "country-select": "Selectionner un pays",
+    "submit": "Générer l'étiquette d'expédition",
+    "res-1": "Votre étiquette d'expédition et les instructions ont été envoyées sur votre adresse email.",
+    "res-2": "Veuillez vérifier votre adresse email et votre dossier spam.",
+    "res-3": "Il se peut que vous ne le receviez pas immédiatement, veuillez attendre jusqu'à 10 minutes."
+
+  },
+  "result" : {
+    "title" : "Merci d'avoir vendu à Coproom",
+    "subtitle" : {
+      "1" : "Votre formulaire a été soumis avec succès.",
+      "2" : "N'oubliez pas, vous pouvez vendre d'autres items directement sur le site "
+    },
+    "reduction" : "Obtenez 10e sur tout le site en utilisant notre code spécial vendeur ",
+    "alert" : " Vous devez expédier ou déposer dans les 2 jours ouvrables, à moins qu'il n'en ait été décidé autrement avec un employé de Coproom. ",
+    "follow" : "suivez-nous sur instagram",
+    "shipping" : "Merci de vous présenter au 77 rue de prony 75017 Paris à la date convenue en notifiant par message facebook ou par sms au 06 71 50 41 48."
+  },
+  "transac" : {
+    "gift" : {
+      "title_1" : "1. Remplir le formulaire",
+      "text_1" : "Une fois soumis, la transaction sera confirmée et vous ne pourrez pas annuler pour quelque raison que ce soit.",
+      "title_2" : "2. Expédiez-nous votre (vos) article(s)",
+      "text_2" : "Vous pouvez utiliser le générateur de label Coproom ci-dessous ou votre propre mode d'expédition (veuillez utiliser uniquement votre poste nationale, DHL ou UPS)",
+      "title_3" : "3. Soyez payé",
+      "text_3" : "Dès que nous recevons et authentifions votre (vos) article(s), vous serez payé par Paypal payout ou par virement bancaire sans frais de transaction."
+    },
+    "invoice" : {
+      "title_1" : "1. Remplir le formulaire",
+      "text_1" : "Une fois soumis, la transaction sera confirmée et vous ne pourrez pas annuler pour quelque raison que ce soit.",
+      "title_2" : "2. Soyez payé",
+      "text_2" : "Dès réception de votre facture PayPal, vous serez immédiatement payé ",
+      "title_3" : "3. Expédiez-nous votre (vos) article(s)",
+      "text_3" : "Vous pouvez utiliser générateur de label Coproom ci-dessous ou votre propre méthode d'expédition (veuillez utiliser uniquement votre poste nationale, DHL ou UPS).      ",
+      "small_before" : "(veuillez noter que ",
+      "small_in" : "Frais PayPal",
+      "small_after" : "en fonction du type et de l'emplacement de votre compte PayPal)."
+    },
+    "dropoff" : {
+      "title_1" : "1. Remplir le formulaire",
+      "text_1" : "Une fois soumis, la transaction sera confirmée et vous ne pourrez pas annuler pour quelque raison que ce soit.",
+      "title_2" : "2. Apportez-nous votre (vos) article(s)",
+      "text_2" : " Apportez votre (vos) article(s) au siège de Coproom à Paris dasn le 17eme arrondissement.",
+      "title_3" : "3. Soyez payé",
+      "text_3" : "Vous serez payé instantanément lors du dépôt par paiement paypal ou virement bancaire sans frais de transaction."
+    },
+    "shipping" : {
+      "title" : "Expédition Coproom",
+      "text_1" : "Ceci générera une étiquette d'expédition dhl que vous pourrez utiliser pour expédier vos articles à Coproom. C'est rapide (24h) et facile, ce qui vous fait gagner du temps et de l'argent.",
+      "text_2" : "Cela vous coutera",
+      "text_3" : "par article, c'est-à-dire",
+      "france" : " Si vous expédiez depuis la France ou si vous vendez plus de 8 items, le prix de l'expédition sera automatiquement rabaissé.",
+      "my_ship" : "Non merci, j'aimerais expédier l'article par mes propres moyens."
+    },
+    "verif" : {
+      "not_dropoff" : "Je garantis que les articles sont authentiques, neufs, dans leur emballage d'origine et que je les expédierai en double box dans les 48 heures",
+      "team" : "(à moins qu'un autre délai ai préalablement été décidé avec un membre de l'équipe Coproom),",
+      "dropoff" : "Je vous garantis que les articles sont authentiques, neufs, dans leur emballage d'origine et que je respecterai la date de livraison."
+    }
+  },
+  "recap":{
+    "label": "Récapitulatif",
+    "title": "Récapitulatif de votre vente :",
+    "subtitle": "Vous serez payé :",
+    "method": "Mode de paiement :",
+    "payout": "Payout (sans frais)"
   }
+
 }

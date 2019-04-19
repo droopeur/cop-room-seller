@@ -1,0 +1,327 @@
+<div class="container col-lg-12">
+  <div class="card">
+    <div class="row card-body" style="padding-right:0;padding-bottom: 0;">
+      <div class="col-lg-6">
+        <div class="input-group mb-3">
+
+          <i class="fas fa-search"></i> <input type="text" class="form-control" placeholder="Item size" [(ngModel)]="searchInput"
+                                               (ngModelChange)="valueChange($event)" #search="ngModel" name="search">
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="input-group mb-3">
+
+          <input type="text" class="form-control" placeholder="Note"
+                name="search">
+        </div>
+      </div>
+
+    </div>
+    <div class="row card-body" style="padding-top:0;padding-bottom: 0">
+      <div class="col-md-3" style="margin-bottom:10px">
+
+        <div class="row">
+
+          <div class="col-12" style="display: flex">
+            <i class="fas fa-filter"></i>
+
+            <span [class]="'badge badge-all '+isSelected('all','none')" (click)="filter.type='none';filter.order_number='none';filter.category = 'none';filter.date = 'none';maxValue=options.ceil;minValue=options.floor; getSearchResults()">No filter</span>
+
+          </div>
+        </div>
+      </div>
+      <div class="pd-5 pd-15-lt" >
+
+        <span [class]="'badge badge-complete '+isSelected('inventory', 'none')" (click)="filter.inventory='none';  getSearchResults()">All</span>
+
+      </div>
+      <div class="pd-5">
+        <span [class]="'badge badge-complete '+isSelected('inventory', 'transit')" (click)="filter.inventory='transit';   getSearchResults()">Pending</span>
+      </div>
+      <div class="pd-5">
+        <span [class]="'badge badge-complete '+isSelected('inventory', 'authentified')" (click)="filter.inventory='authentified';  getSearchResults()">In stock</span>
+      </div>
+      <div class="col-md-1"></div>
+      <div class="col-md-5">
+        <div class="dropdown">
+          <button class="badge dropdown-toggle dpd" type="button" (click)="hideSlider = !hideSlider" style="color:black">
+            Inventory duration
+          </button>
+          <div class="dropdown-menu" style="display: block" *ngIf="!hideSlider">
+            <div class="custom-slider" style=" margin: 0 20px ">
+              <ng5-slider  style="width:100%" [(value)]="minValue" [(highValue)]="maxValue" [options]="options" (userChangeEnd)="changeSlider($event)"></ng5-slider>
+            </div>
+          </div>
+          </div>
+        </div>
+        <!--<nouislider style="width:100%" [connect]="true" [min]="0" [max]="300" [(ngModel)]="someRange" [tooltips]="true"></nouislider>-->
+
+      <!--<div class="pd-5">-->
+        <!--<span [class]="'badge badge-complete '+isSelected('inventory', 'paid')" (click)="filter.inventory='paid';  getSearchResults()">Paid</span>-->
+
+      <!--</div>-->
+
+      <!--<div class="col-md-3" style="margin-bottom:10px">-->
+        <!--<div class="row" style="display: -webkit-box">-->
+          <!--<div class="col-6 text-right">-->
+            <!--<span [class]="'badge badge-pending '+isSelected('type', 'direct cash out')" (click)="filter.type='direct cash out'; getSearchResults()">Particulier</span>-->
+          <!--</div>-->
+          <!--<div class="col-6">-->
+            <!--<span [class]="'badge badge-pending '+isSelected('type', 'cash receipt')" (click)="filter.type='cash receipt'; getSearchResults()">Pro</span>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    </div>
+
+    <div class="card-body--">
+      <ul class="category-list" *ngIf="route=='stock'">
+        <li [class]="isSelected('category', 'none')" (click)="filter.category='none'">All</li>
+        <li [class]="isSelected('category', 'Yeezy')" (click)="filter.category='Yeezy'">Yeezy</li>
+        <li [class]="isSelected('category', 'Off White')" (click)="filter.category='Off White'">Off white</li>
+        <li [class]="isSelected('category', 'Jordan')" (click)="filter.category='Jordan'">Jordan</li>
+        <li [class]="isSelected('category', 'Nike')" (click)="filter.category='Nike'">Nike</li>
+        <li [class]="isSelected('category', 'Adidas')" (click)="filter.category='Adidas'">Adidas</li>
+        <li [class]="isSelected('category', 'Supreme')" (click)="filter.category='Supreme'">Supreme</li>
+
+        <li [class]="isSelected('category', 'Other')" (click)="filter.category='Other'">Other</li>
+      </ul>
+      <hr style="margin-bottom:0" />
+      <div class="table-responsive table-stats order-table ov-h">
+        <!--<ng-container *ngIf="searchInput == '' && RepsearchInputNote == '' && RepsearchInput== '' ; else results">-->
+
+        <table width="100%" style="height:550px;overflow: scroll;display: block;" class="table table-hover " [mfData]="getSearchResults()" #mf="mfDataTable" [mfRowsOnPage]="40"
+               [mfSortBy]='"timed_date"' [mfSortOrder]="'desc'">
+          <thead>
+          <tr>
+            <!--<th scope="col">Del</th>-->
+            <th>#</th>
+            <!--<th scope="col">-->
+              <!--<mfDefaultSorter by="nom">Nom & Prenom</mfDefaultSorter>-->
+            <!--</th>-->
+            <!--&lt;!&ndash;<th scope="col "><i class="fas fa-envelope"></i></th>&ndash;&gt;-->
+
+            <!--<th scope="col" >-->
+              <!--<mfDefaultSorter by="timed_date">Date</mfDefaultSorter>-->
+            <!--</th>-->
+            <!--<th scope="col">  <mfDefaultSorter by="type">Type</mfDefaultSorter></th>-->
+            <th scope="col">
+              <mfDefaultSorter by="modele">Item</mfDefaultSorter>
+            </th>
+            <th scope="col">
+              <mfDefaultSorter by="modele">Size</mfDefaultSorter>
+            </th>
+            <th scope="col">
+              <mfDefaultSorter by="prix">Prix</mfDefaultSorter>
+            </th>
+            <th scope="col">Add to inventory</th>
+            <th> <mfDefaultSorter by="date_until_stock">Time</mfDefaultSorter></th>
+            <ng-container *ngIf="route=='stock'">
+              <th  scope="col">SH</th>
+              <th  scope="col">FC</th>
+              <th  scope="col">SG</th>
+              <th  scope="col">SX</th>
+
+            </ng-container>
+            <th scope="col">
+              <mfDefaultSorter by="order_number">Commande</mfDefaultSorter>
+            </th>
+
+            <!--<th scope="col"><mfDefaultSorter by="paid" (click)="keepPaid()" >Paid</mfDefaultSorter></th>-->
+            <!--<th scope="col">-->
+            <!--<mfDefaultSorter by="police_number">Note</mfDefaultSorter>-->
+            <!--</th>-->
+
+            <th scope="col">
+              <ng-container *ngIf="route=='stock'; else noteTitle">
+                Sold
+              </ng-container>
+              <ng-template #noteTitle>
+                <mfDefaultSorter by="police_number">Note</mfDefaultSorter>
+            </ng-template>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let fiche of mf.data,let i=index">
+            <tr *ngIf="!fiche.hide" [class]="'table-row '+checkBg(fiche)" >
+              <!--<td>-->
+              <!--<button class="btn btn-sm btn-danger" (click)="openDelete(fiche.objectID)"><i-->
+              <!--class="fas fa-trash"></i></button>-->
+              <!--</td>-->
+              <td>{{i+1}}</td>
+
+              <!--<td scope="row" (click)="getInfos(fiche)">{{fiche['nom']}} {{fiche['prenom']}}</td>-->
+              <!--<td><button *ngIf="fiche['mail_paypal']" class="btn btn-sm btn-info" (click)="openMailModal(fiche)"><i class="fas fa-envelope"></i></button></td>-->
+              <!---->
+              <!--<td >-->
+                <!--&lt;!&ndash;<input type="text" class="form-control" required [(ngModel)]="fiche['date']"&ndash;&gt;-->
+                <!--&lt;!&ndash;#expi="ngModel" name="date_expire"&ndash;&gt;-->
+                <!--&lt;!&ndash;(change)="changeDate(fiche,$event.target.value)"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;{{fiche['date'].toDateString() | slice:0:10}}&ndash;&gt;-->
+                <!--<ng-container *ngIf="fiche['date']['seconds']">-->
+                  <!--{{fiche['date']['seconds']*1000 | date:'EEE MMM dd'}}-->
+                <!--</ng-container>-->
+              <!--</td>-->
+              <!--<td>{{fiche['type']}}</td>-->
+
+              <td (click)="getInfos(fiche)">
+                <!--<input type="text" class="form-control" required [(ngModel)]="fiche['modele']"-->
+                <!--#expi="ngModel" name="date_expire"-->
+                <!--(change)="changeModele(fiche,$event.target.value)"/>-->
+
+                <!--<br/> <input type="text" class="form-control" required [(ngModel)]="fiche['size']" #expi="ngModel"-->
+                <!--name="date_expire" (change)="changeSize(fiche,$event.target.value)"/> {{fiche['color']}}-->
+                {{fiche['modele']}}
+              </td>
+              <td (click)="getInfos(fiche)">
+                <!--<input type="text" class="form-control" required [(ngModel)]="fiche['modele']"-->
+                <!--#expi="ngModel" name="date_expire"-->
+                <!--(change)="changeModele(fiche,$event.target.value)"/>-->
+
+                <!--<br/> <input type="text" class="form-control" required [(ngModel)]="fiche['size']" #expi="ngModel"-->
+                <!--name="date_expire" (change)="changeSize(fiche,$event.target.value)"/> {{fiche['color']}}-->
+         {{fiche['size']}}
+              </td>
+
+
+              <td (click)="getInfos(fiche)">
+                <!--<input type="text" class="form-control" required [(ngModel)]="fiche['prix']"-->
+                <!--#fichp="ngModel" name="date_expire"-->
+                <!--(change)="changePrice(fiche,$event.target.value)"/>-->
+                {{fiche['prix']}}
+              </td>
+
+
+              <td>
+                <button *ngIf="!fiche['inventory'];else arrived" class="btn btn-sm btn-info" (click)="assign(fiche);ngxSmartModalService.get('arrivedModal2').open()" [disabled]="fiche['inventory'] && fiche['inventory']['arrived']"><i class="fas fa-box-open"></i>
+                </button>
+                <ng-template #arrived>
+                  <div style="padding: 0.25rem 0.5rem;">
+                  <i class="fas fa-box"></i>
+                  </div>
+                </ng-template>
+              </td>
+              <td>
+                {{fiche['date_until_stock']}}
+              </td>
+              <ng-container *ngIf="route=='stock'">
+                <td class="td-checkbox"><input type="checkbox" [(ngModel)]="fiche['inventory']['listed']['SH']" (change)="putListedOn(fiche,'SH',$event.target.checked)" [disabled]="fiche['inventory']['sold']"></td>
+                <td  class="td-checkbox"><input type="checkbox" [(ngModel)]="fiche['inventory']['listed']['FC']" (change)="putListedOn(fiche,'FC',$event.target.checked)" [disabled]="fiche['inventory']['sold']"></td>
+                <td class="td-checkbox"><input type="checkbox"  [(ngModel)]="fiche['inventory']['listed']['SG']" (change)="putListedOn(fiche,'SG',$event.target.checked)" [disabled]="fiche['inventory']['sold']"></td>
+                <td  class="td-checkbox"><input type="checkbox" [(ngModel)]="fiche['inventory']['listed']['SX']" (change)="putListedOn(fiche,'SX',$event.target.checked)" [disabled]="fiche['inventory']['sold']"></td>
+
+              </ng-container>
+              <td class="order-col">
+                <form><input [class]="'form-control  '" placeholder="Order nb"
+                             [(ngModel)]="fiche['order_number']" name="ngModel"  [disabled]="true"/>
+                </form>
+              </td>
+              <!--<td><button *ngIf="fiche['paid']!== undefined" class="btn btn-sm btn-warning" (click)="markAsPaid(fiche)"><i class="fas fa-money-check-alt"></i></button>-->
+              <!--</td>-->
+<ng-container *ngIf="route=='stock';else note">
+  <td><button class="btn btn-sm btn-info" (click)="openSold(fiche)"><i class="fas fa-file-invoice-dollar"></i> Sold
+  </button></td>
+</ng-container>
+              <ng-template #note>
+                <td class="note"><input style="" [class]="'form-control'" placeholder="" [(ngModel)]="fiche['police_number']" name="ngModel" (change)="updatePoliceNumb(fiche)"/></td>
+              </ng-template>
+              <!--<td><input type="checkbox" id="scales" name="scales"-->
+              <!--(change)="changeProcess(fiche)"-->
+              <!--[checked]="fiche.processed"></td>-->
+            </tr>
+          </ng-container>
+
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="4">
+              <mfBootstrapPaginator [rowsOnPageSet]="[40,80,160]"></mfBootstrapPaginator>
+            </td>
+          </tr>
+          </tfoot>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<ngx-smart-modal #myModal identifier="myModal" [customClass]="'nsm-dialog-animation-btt'" [hideDelay]="300" (onClose)="this.downloadUrl=undefined; this.progress=undefined">
+  <app-fiche [fiche]="fiche"></app-fiche>
+</ngx-smart-modal>
+
+<ngx-smart-modal #errorModal identifier="errorModal">
+  <div class="alert alert-danger" style="margin:-16px">
+    FORMAT INCORECT
+  </div>
+
+
+</ngx-smart-modal>
+<ngx-smart-modal #arrivedModal2 identifier="arrivedModal2">
+
+    <h2 class="modal-title" style="margin-bottom:1.5em">Mark as Arrived in stock</h2>
+  <p style="color:black"><b>Modele:</b> {{fiche['modele']}} - {{fiche['size']}}</p>
+  <p style="color:black"><b>Envoye par:</b> {{fiche['nom']}} {{fiche['prenom']}}</p>
+  <p style="color:black"><b>Category:</b></p>
+  <select type="text" class="form-control" required [(ngModel)]="category">
+    <option value="Yeezy">Yeezy</option>
+    <option value="Off White">Off white</option>
+    <option value="Jordan">Jordan</option>
+    <option value="Nike">Nike</option>
+  <option value="Adidas">Adidas</option>
+    <option value="Supreme">Supreme</option>
+
+    <option value="Other">Other</option></select>
+  <div class="modal-footer">
+    <button type="button" class="btn  btn-info badge-pending" style="margin-left:auto" (click)="markAsArrived(fiche,category)" [disabled]="!category">Mark as arrived
+    </button>
+  </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #soldModal identifier="soldModal">
+  <h2 class="modal-title" style="margin-bottom:1.5em">Mark item as sold</h2>
+  <p style="color:black"><b>Modele:</b> {{fiche['modele']}} - {{fiche['size']}}</p>
+  <p style="color:black"><b>Envoye par:</b> {{fiche['nom']}} {{fiche['prenom']}}</p>
+  <p *ngIf="fiche['inventory']" style="color:black"><b>Category:</b> {{fiche['inventory']['category']}}</p>
+  <p  *ngIf="fiche['inventory']" style="color:black"><b>Achete par:</b> {{fiche['inventory']['employee']}}</p>
+  <div  class="form-group">
+    <label  class=" form-control-label" for="city" >Sold on</label>
+    <select  class="form-control " required="" [(ngModel)]="fiche['sold_on']" (change)="changeOrderNumb(fiche)" >
+      <option *ngIf="fiche['inventory'] && fiche['inventory']['listed']['SX']" value="StockX" >StockX</option>
+      <option *ngIf="fiche['inventory'] && fiche['inventory']['listed']['SG']" value="Stadium Goods" >Stadium Goods</option>
+      <option *ngIf="fiche['inventory'] && fiche['inventory']['listed']['FC']" value="Flight Club" >Flight Club</option>
+      <option *ngIf="fiche['inventory'] && fiche['inventory']['listed']['SH']" value="Shopify" >Shopify</option>
+      <option value="other" selected>Autre</option>
+    </select>
+  </div>
+  <div>
+    <p style="color:brown" *ngIf="fiche['sold_on'] && fiche['inventory'] && fiche['inventory']['listed']['SX'] && fiche['inventory'] && fiche['inventory']['listed']['SH']">
+
+      Your item is listed on stockX and Shopify, and you sold it on {{fiche['sold_on']}}.<br/>
+      Please <b>remove it from <ng-container *ngIf="fiche['sold_on']=='Shopify'; else soldShopify">StockX</ng-container>
+      <ng-template   #soldShopify><ng-container *ngIf="fiche['sold_on']=='StockX'">Shopify</ng-container></ng-template>
+      <ng-container *ngIf="fiche['sold_on']=='other'"> StockX and Shopify</ng-container>
+    </b>.
+   <br/><ng-container *ngIf="fiche['sold_on']=='other'">
+      The invoice will not be generated because you choose other.
+      <b >Please generate it manually.</b>
+    </ng-container> </p></div>
+  <div class="form-group">
+  <input [class]="'form-control  '" placeholder="Order nb"
+         [(ngModel)]="fiche['sold_order_number']" name="ngModel" />
+</div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn  btn-info badge-pending" style="margin-left:auto" (click)="sold(fiche)" >Mark as sold
+    </button>
+  </div>
+
+</ngx-smart-modal>
+<a id="testa" style="display:none">t</a>

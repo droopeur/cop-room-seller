@@ -1,0 +1,223 @@
+<div id="fiche_template" style="display: none"  *ngIf="invoice">
+  <div class="container" style="padding-top:20px">
+    <p class="c7"><span
+      style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 185.50px; height: 50.51px;"><img
+      alt="" crossorigin="anonymous"
+      src="https://cdn.shopify.com/s/files/1/0006/4353/0817/files/COPROOM_BOXLOGO.png?7616672809349822695"
+      style="width: 185.50px; height: 50.51px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);"
+      title=""></span></p>
+    <p class="c2 c6"><span class="c5"></span></p>
+    <p class="c2"><span>FACTURE</span><span class="c14">&nbsp;{{invoice.number}}</span></p>
+    <p class="c2"><span>{{invoice.date | date}}</span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2"><span class="c5">COPROOM</span></p>
+    <p class="c2"><span class="c0">22 TER BLVD DU GENERAL LECLERC</span></p>
+    <p class="c2"><span class="c0">92200 NEUILLY SUR SEINE</span></p>
+    <p class="c8"><span class="c0">{{invoice.client['name']}}</span></p>
+    <p class="c8" *ngIf="invoice['client']['tva']"><span class="c0">TVA°: {{invoice['client']['tva']}}</span></p>
+
+    <p class="c8"><span class="c0">{{invoice.client['mail']}}</span></p>
+    <p class="c8"><span class="c0">{{invoice.client['address1']}}</span></p>
+    <p class="c8"><span class="c0">{{invoice.client['address2']}}</span></p>
+    <p class="c8"><span class="c0">{{invoice.client['zip']}} {{invoice.client['city']}}</span></p>
+    <p class="c8"><span class="c0">{{invoice.client['country']}}</span></p>
+
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c3"></span></p>
+    <p class="c2 c6"><span class="c3"></span></p><a id="t.a61b80bb227d9d189ce56b79cae764543e45ef32"></a><a id="t.0"></a>
+    <ng-container  *ngIf="!invoice.client.eu">
+       <table class="table table-striped table-bordered ">
+          <thead>
+          <tr>
+            <th scope="col">Description</th>
+            <th scope="col">Quantite</th>
+            <th scope="col">Prix en euros</th>
+            <th scope="col">Total TTC en euros</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let article of invoice['articles']">
+            <td>{{article?.modele}} {{article?.size}}</td>
+            <td>{{article?.quantity}}</td>
+            <td>{{article?.prix}} euros</td>
+            <td>{{article?.prix * article?.quantity}} euros</td>
+          </tr>
+          <tr *ngIf="invoice['discount']">
+            <td></td>
+            <td></td>
+            <td style="text-align: end;"><b>Remise:</b></td>
+            <td>-{{(invoice['discount'])}} euros</td>
+          </tr>
+          <tr *ngIf="invoice['shipping']">
+            <td></td>
+            <td></td>
+            <td style="text-align: end;"><b>Livraison:</b></td>
+            <td>{{invoice['shipping']}} euros</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td style="text-align: end;"><b>TOTAL en euros:</b></td>
+            <td>{{invoice.total}} euros</td>
+          </tr>
+          </tbody>
+
+        </table>
+        <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">ROOM GROUP SASU AU CAPITAL DE 6000&euro;</span></p>
+        <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">RCS Nanterre: 837 528 470 - N&deg;TVA Intracommunautaire: FR 48837528 470</span>
+        </p>
+        <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">&nbsp; &nbsp; &nbsp; &nbsp; Regime de TVA droit commun</span>
+        </p>
+      </ng-container>
+      <ng-container *ngIf="invoice.client.eu">
+        <ng-container *ngIf="tableToShow()['margin']">
+            <table class="table table-striped table-bordered " >
+
+              <thead >
+              <tr>
+                <th scope="col">Description</th>
+                <th scope="col">Quantite</th>
+                <th scope="col">Prix unitaire TTC euros</th>
+                <th scope="col">Total en euros</th>
+              </tr>
+              </thead>
+              <tbody >
+              <ng-container  *ngFor="let article of invoice['articles']">
+              <tr *ngIf="article['tva_margin'] || !article['fiche'] ">
+                <td>{{article.modele}} {{article.size}}</td>
+                <td>{{article.quantity}}</td>
+                <td>{{article.prix}} euros</td>
+                <td>{{article.prix}} euros</td>
+              </tr>
+              </ng-container>
+              <tr>
+                <td></td>
+                <td></td>
+                <td style="text-align: end;"><b>TOTAL TTC en euros:</b></td>
+                <td>{{getTotal('tva_margin')['ttc']}} euros</td>
+              </tr>
+              </tbody>
+
+            </table>
+            <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">ROOM GROUP SASU AU CAPITAL DE 6000&euro;</span></p>
+            <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">RCS Nanterre: 837 528 470 - N&deg;TVA Intracommunautaire: FR 48837528 470</span>
+            </p>
+            <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">&nbsp; &nbsp; &nbsp; &nbsp; Regime TVA sur marge Article 297 A du CGI Directive communautaire 2006/112/CE</span>
+            </p>
+        </ng-container>
+        <ng-container *ngIf="tableToShow()['intracom']">
+          <table class="table table-striped table-bordered " >
+            <thead>
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col">Quantite</th>
+              <th scope="col">Prix unitaire HT euros</th>
+              <th scope="col">TVA (20%) en euros</th>
+              <th scope="col">Total TTC en euros</th>
+            </tr>
+            </thead>
+            <tbody >
+            <ng-container *ngFor="let article of invoice['articles']">
+            <tr  *ngIf="article['tva_intracom']">
+              <td>{{article.modele}} {{article.size}}</td>
+              <td>{{article.quantity}}</td>
+              <td>{{article.prix - article.tva_intracom}} euros</td>
+              <td>{{article.tva_intracom }} euros</td>
+
+              <td>{{article.prix}} euros</td>
+            </tr>
+            </ng-container>
+            <!--<tr *ngIf="invoice['discount']">-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td style="text-align: end;"><b>Remise:</b></td>-->
+            <!--<td>-{{(getTotalHt(invoice['discount'])).toFixed(2)}} euros</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td></td>-->
+            <!--<td style="text-align: end;"><b>Remise:</b></td>-->
+            <!--<td>-{{(getTotalHt(invoice['discount']))}} euros</td>-->
+            <!--</tr>-->
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td style="text-align: end;"><b>TOTAL TTC en euros:</b></td>
+              <td>{{getTotal('tva_intracom')['ttc']}} euros</td>
+            </tr>
+            </tbody>
+
+          </table>
+          <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">ROOM GROUP SASU AU CAPITAL DE 6000&euro;</span></p>
+          <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">RCS Nanterre: 837 528 470 - N&deg;TVA Intracommunautaire: FR 48837528 470</span>
+          </p>
+          <p class="c7" style="margin-bottom: 0.2em;"><span class="c11">&nbsp; &nbsp; &nbsp; &nbsp; Regime de TVA droit commun</span>
+          </p>
+        </ng-container>
+        </ng-container>
+
+    <!--<table class="c10">-->
+    <!--<tbody>-->
+    <!--<tr class="c13">-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c15"><span>DESCRIPTION</span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c15"><span>QUANTIT&Eacute;</span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c12"><span>PRIX en euro &euro;</span></p></td>-->
+    <!--<td class="c16" colspan="1" rowspan="1"><p class="c12"><span class="c0">TOTAL en euro &euro;</span></p></td>-->
+    <!--</tr>-->
+    <!--<tr class="c13">-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--</tr>-->
+    <!--<tr class="c13">-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--</tr>-->
+    <!--<tr class="c13">-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c12"><span class="c0">TOTAL en euro &euro;</span></p></td>-->
+    <!--<td class="c9" colspan="1" rowspan="1"><p class="c1"><span class="c3"></span></p></td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <p class="c2 c6"><span class="c3"></span></p>
+    <ng-container *ngIf="invoice['payment']=='bred'">
+
+      <p class="c2"><span class="c3">Merci d&rsquo;effectuer le virement &agrave;:</span></p>
+      <p class="c2"><span class="c0">NOM: ROOM GROUP</span></p>
+      <p class="c2"><span class="c0">IBAN: FR76 1010 7002 7800 4160 6172 226</span></p>
+      <p class="c2"><span class="c0">BIC/SWIFT: BREDFRPPXXX</span></p>
+    </ng-container>
+    <ng-container *ngIf="invoice['payment']=='qonto' || invoice['client']['eu'] == true">
+      <p class="c2"><span class="c3">Merci d&rsquo;effectuer le virement &agrave;:</span></p>
+      <p class="c2"><span class="c0">NOM: ROOM GROUP</span></p>
+      <p class="c2"><span class="c0">IBAN: FR76 1679 8000 0100 0004 7204 104</span></p>
+      <p class="c2"><span class="c0">BIC: TRZOFR21XX</span></p>
+      <p class="c2"><span class="c0"><b>Please do not make any SWIFT bank transfer on this bank account, only SEPA transfers.
+      </b></span></p>
+      <p class="c2"><span class="c0"><b>Contact us if you can only do SWIFT bank transfers.</b></span></p>
+
+    </ng-container>
+    <ng-container *ngIf="invoice['payment']=='qonto'">
+    </ng-container>
+
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c7"><span class="c0">Merci pour votre commande.</span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+    <p class="c2 c6"><span class="c0"></span></p>
+
+  </div>
+</div>

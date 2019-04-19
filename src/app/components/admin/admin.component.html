@@ -1,572 +1,141 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">CopRoom</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/admin">Fiches</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/generator">Generateur</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/invoices">Invoice generator</a>
-      </li><li class="nav-item">
-      <a class="nav-link" routerLink="/invoices/list">Invoice List</a>
-    </li>
-    </ul>
-  </div>
-</nav>  <div class="container">
-    <br/>
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Rechercher"  [(ngModel)]="searchInput"
-             (ngModelChange)="valueChange($event)" #search="ngModel" name="search" >
+<header id="header" class="header">
+  <img id="logo" (click)="_opened=!_opened" class="img img-fluid" src="https://cdn.shopify.com/s/files/1/0006/4353/0817/files/COPROOM_BOXLOGO.png?15616493591463283195">
+  <!--<a id="menuToggle" class="menutoggle" (click)="_opened=!_opened"><i class="fa fa-bars"></i></a>-->
+  <div class=" page-header float-right">
+    <div class="page-title">
+      <ol class="breadcrumb text-right hidemob">
+        <li style="color:#878787">{{location()[0]}}</li>
+        <li class="active">{{location()[1]}}</li>
+      </ol>
     </div>
-  <div class="table-responsive">
-    <table class="table table-hover " [mfData]="fiches" #mf="mfDataTable" [mfRowsOnPage]="40" [mfSortBy]="'date'" [mfSortOrder]="'desc'" >
-      <thead>
-      <tr>
-        <th scope="col">Del</th>
-
-        <th scope="col">
-          <mfDefaultSorter by="nom">Nom & Prenom</mfDefaultSorter></th>
-        <th scope="col">
-          <mfDefaultSorter by="mail">mail</mfDefaultSorter></th>
-        <th scope="col">  <mfDefaultSorter by="date">Date</mfDefaultSorter></th>
-        <th scope="col">  <mfDefaultSorter by="type">Type</mfDefaultSorter></th>
-        <th scope="col"><mfDefaultSorter by="modele">Item</mfDefaultSorter></th>
-        <th scope="col"><mfDefaultSorter by="prix">Prix</mfDefaultSorter></th>
-        <th scope="col"> Print</th>
-        <th scope="col"> Dl</th>
-
-        <th scope="col"  class="order-col"><mfDefaultSorter by="order_number">Commande</mfDefaultSorter></th>
-        <th scope="col"><mfDefaultSorter by="paid" (click)="keepPaid()" >Paid</mfDefaultSorter></th>
-        <th scope="col"><mfDefaultSorter by="police_number">note</mfDefaultSorter></th>
-
-      </tr>
-      </thead>
-      <tbody>
-      <ng-container *ngFor="let fiche of mf.data">
-      <tr  *ngIf="!fiche.hide" [class]="'table-row '+fiche.paid">
-        <td><button class="btn btn-sm btn-danger" (click)="delete(fiche.objectID)"><i class="fas fa-trash"></i></button></td>
-
-        <th scope="row" class="order-col">{{fiche['nom']}} {{fiche['prenom']}}</th>
-        <td class="">{{fiche['mail']}}</td>
-
-        <td>{{fiche['date'] | date}}</td>
-        <td>{{fiche['type']}}</td>
-
-        <td>{{fiche['modele']}} {{fiche['color']}} {{fiche['size']}}</td>
-
-        <td>{{fiche['prix']}}</td>
-
-        <td><button class="btn btn-sm btn-info" (click)="assign(fiche);printToCart(fiche['type'], fiche)"><i class="fas fa-print"></i></button></td>
-        <td><button class="btn btn-sm btn-info" (click)="downloadAsPDF(fiche)"><i class="fas fa-download"></i></button></td>
-
-        <td class="order-col" ><form   ><input [class]="'form-control  '+checkColor(fiche)" placeholder="Order nb" [(ngModel)]="fiche['order_number']" name="ngModel" (change)="updateOrderNumb(fiche)"/></form></td>
-        <td><button *ngIf="fiche['paid']!== undefined" class="btn btn-sm btn-warning" (click)="markAsPaid(fiche)"><i class="fas fa-money-check-alt"></i></button>
-        </td>
-
-        <td><form   ><div class="col-auto"><input [class]="'form-control orderNumb '+checkColorPolice(fiche)" placeholder="Item nb" [(ngModel)]="fiche['police_number']" name="ngModel" (change)="updatePoliceNumb(fiche)"/> </div></form></td>
-
-      </tr>
-      </ng-container>
-      </tbody>
-      <tfoot>
-      <tr>
-        <td colspan="4">
-          <mfBootstrapPaginator [rowsOnPageSet]="[40,80,160]"></mfBootstrapPaginator>
-        </td>
-      </tr>
-      </tfoot>
-
-    </table>
   </div>
+  <div class="margin">
+    <p style="text-transform: capitalize">{{firstname}} {{lastname}} <span [class]="'connection '+isConnected " ></span> </p>
   </div>
-<div class="footer" style="margin-bottom:5px">
-  <hr/>
-  <button style="margin-left:5px" class="btn btn-warning" (click)="makeSvg()">database Svg</button>
-  <a class="" title="Download JSON" [href]="downloadJsonHref" download="download.json" style="opacity:0" #svgBtn >Download db</a>
-  <br/>
-</div>
-  <div id="direct cash out" style="display:none" #direct >
-    <style>ol {
-      margin: 0;
-      padding: 0
-    }
+</header>
+<ng-sidebar-container>
 
-    /*table td, table th {*/
-      /*padding: 0*/
-    /*}*/
+  <!-- A sidebar -->
+  <ng-sidebar [(opened)]="_opened" [mode]="mode" [sidebarClass]="'left-panel-2'" [dock]="dock" [dockedSize]="'83px'" [showBackdrop]="deviceService.isMobile()" [closeOnClickBackdrop]="deviceService.isMobile()">
+    <nav class="navbar navbar-expand-sm navbar-default" *ngIf="_opened; else closed">
+      <div class="cross-container" (click)="_opened=false"><i class="fas fa-times"></i></div>
+      <div id="main-menu" class="main-menu collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="">
+            <a style="  background: linear-gradient(90deg,#a7d5f5,#8abdeb) !important;
+  box-shadow: 2px 2px 20px 0px rgba(138,189,235,0.5) !important;padding-left:20px;padding-right:20px;margin-top:30px"class="badge badge-pending" routerLink="/admin/"><b>HOME</b> </a>
+          </li>
+          <li class="menu-title">Achats</li><!-- /.menu-title -->
+          <li class="menu-item-has-children">
+            <a  routerLink="/admin/fiche-list"  aria-haspopup="true" aria-expanded="false">
+              <i class="menu-icon fas fa-list-alt"></i>
+              Fiches et factures</a>
 
-    .c10 {
-      border-right-style: solid;
-      padding: 5pt 5pt 5pt 5pt;
-      border-bottom-color: #000000;
-      border-top-width: 1pt;
-      border-right-width: 1pt;
-      border-left-color: #000000;
-      vertical-align: top;
-      border-right-color: #000000;
-      border-left-width: 1pt;
-      border-top-style: solid;
-      border-left-style: solid;
-      border-bottom-width: 1pt;
-      width: 61.5pt;
-      border-top-color: #000000;
-      border-bottom-style: solid
-    }
+          </li>
+          <li class="menu-item-has-children">
+            <a  routerLink="/admin/generator/particulier"  aria-haspopup="true" aria-expanded="false">
+              <!--<i class="menu-icon fa fa-cogs"></i>-->
+              <i class="menu-icon fas fa-file-invoice"></i>
+              Générateur de fiches</a>
 
-    .c18 {
-      border-right-style: solid;
-      padding: 5pt 5pt 5pt 5pt;
-      border-bottom-color: #000000;
-      border-top-width: 1pt;
-      border-right-width: 1pt;
-      border-left-color: #000000;
-      vertical-align: top;
-      border-right-color: #000000;
-      border-left-width: 1pt;
-      border-top-style: solid;
-      border-left-style: solid;
-      border-bottom-width: 1pt;
-      width: 108pt;
-      border-top-color: #000000;
-      border-bottom-style: solid
-    }
+          </li>
+          <!--<li class="menu-item-has-children">-->
+            <!--<a  routerLink="/admin/cash-receipt"  aria-haspopup="true" aria-expanded="false">-->
+              <!--&lt;!&ndash;<i class="menu-icon fa fa-cogs"></i>&ndash;&gt;-->
+              <!--<i class="menu-icon fas fa-receipt"></i>-->
+              <!--Import de factures</a>-->
 
-    .c15 {
-      border-right-style: solid;
-      padding: 5pt 5pt 5pt 5pt;
-      border-bottom-color: #000000;
-      border-top-width: 1pt;
-      border-right-width: 1pt;
-      border-left-color: #000000;
-      vertical-align: top;
-      border-right-color: #000000;
-      border-left-width: 1pt;
-      border-top-style: solid;
-      border-left-style: solid;
-      border-bottom-width: 1pt;
-      width: 384pt;
-      border-top-color: #000000;
-      border-bottom-style: solid
-    }
+          <!--</li>-->
+          <li class="menu-title">Inventaire</li><!-- /.menu-title -->
+          <li class="menu-item-has-children">
+            <a  routerLink="/admin/inventory/all"  aria-haspopup="true" aria-expanded="false">
+              <i class="menu-icon fas fa-list-alt"></i>
+              All</a>
 
-    .c19 {
-      border-right-style: solid;
-      padding: 5pt 5pt 5pt 5pt;
-      border-bottom-color: #000000;
-      border-top-width: 1pt;
-      border-right-width: 1pt;
-      border-left-color: #000000;
-      vertical-align: top;
-      border-right-color: #000000;
-      border-left-width: 1pt;
-      border-top-style: solid;
-      border-left-style: solid;
-      border-bottom-width: 1pt;
-      width: 139.5pt;
-      border-top-color: #000000;
-      border-bottom-style: solid
-    }
+          </li>
+          <li class="menu-item-has-children">
+            <a  routerLink="/admin/inventory/pending"  aria-haspopup="true" aria-expanded="false">
+              <!--<i class="menu-icon fa fa-cogs"></i>-->
+              <i class="menu-icon fas fa-file-invoice"></i>
+              Pending</a>
 
-    .c5 {
-      border-right-style: solid;
-      padding: 5pt 5pt 5pt 5pt;
-      border-bottom-color: #000000;
-      border-top-width: 1pt;
-      border-right-width: 1pt;
-      border-left-color: #000000;
-      vertical-align: top;
-      border-right-color: #000000;
-      border-left-width: 1pt;
-      border-top-style: solid;
-      border-left-style: solid;
-      border-bottom-width: 1pt;
-      width: 183pt;
-      border-top-color: #000000;
-      border-bottom-style: solid
-    }
+          </li>
+          <li class="menu-item-has-children">
+            <a  routerLink="/admin/inventory/stock"  aria-haspopup="true" aria-expanded="false">
+              <!--<i class="menu-icon fa fa-cogs"></i>-->
+              <i class="menu-icon fas fa-receipt"></i>
+              Inventory</a>
 
-    .c17 {
-      -webkit-text-decoration-skip: none;
-      color: #000000;
-      font-weight: 700;
-      text-decoration: underline;
-      vertical-align: baseline;
-      text-decoration-skip-ink: none;
-      font-size: 11pt;
-      font-family: "Arial";
-      font-style: normal
-    }
+          </li>
+          <li class="menu-title">Vente</li><!-- /.menu-title -->
 
-    .c9 {
-      color: #000000;
-      font-weight: 700;
-      text-decoration: none;
-      vertical-align: baseline;
-      font-size: 11pt;
-      font-family: "Arial";
-      font-style: normal
-    }
+          <li class="menu-item-has-children">
+            <a  routerLink="/admin/invoices/list"  aria-haspopup="true" aria-expanded="false">
+              <!--<i class="menu-icon fa fa-cogs"></i>-->
+              <i class="menu-icon fas fa-file-alt"></i>
+              Factures</a>
 
-    .c4 {
-      color: #000000;
-      font-weight: 400;
-      text-decoration: none;
-      vertical-align: baseline;
-      font-size: 11pt;
-      font-family: "Arial";
-      font-style: normal
-    }
+          </li>
+          <li class="menu-item-has-children">
+            <a  routerLink="/admin/invoices"  aria-haspopup="true" aria-expanded="false">
+              <!--<i class="menu-icon fa fa-cogs"></i>-->
+              <i class="menu-icon fas fa-file-invoice-dollar"></i>
+              Editeur de factures</a>
 
-    .c1 {
-      padding-top: 0pt;
-      padding-bottom: 0pt;
-      line-height: 1.15;
-      orphans: 2;
-      widows: 2;
-      text-align: left;
-      height: 11pt
-    }
-
-    .c3 {
-      padding-top: 0pt;
-      padding-bottom: 0pt;
-      line-height: 1.15;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    .c12 {
-      padding-top: 0pt;
-      padding-bottom: 0pt;
-      line-height: 1.15;
-      orphans: 2;
-      widows: 2;
-      text-align: center
-    }
-
-    .c2 {
-      padding-top: 0pt;
-      padding-bottom: 0pt;
-      line-height: 1.0;
-      text-align: left;
-      height: 11pt
-    }
-
-    .c14 {
-      padding-top: 0pt;
-      padding-bottom: 0pt;
-      line-height: 1.0;
-      text-align: left
-    }
-
-    .c11 {
-      border-spacing: 0;
-      border-collapse: collapse;
-      margin-right: auto
-    }
-
-    .c6 {
-      padding-top: 0pt;
-      padding-bottom: 0pt;
-      line-height: 1.0;
-      text-align: center
-    }
-
-    .c16 {
-      max-width: 451.4pt;
-      padding: 72pt 72pt 72pt 72pt
-    }
-
-    .c13 {
-      font-size: 18pt;
-      font-weight: 700
-    }
-
-    .c22 {
-      font-weight: 700
-    }
-
-    .c8 {
-      height: 63pt
-    }
-
-    .c21 {
-      height: 74pt
-    }
-
-    .c7 {
-      background-color: #ffffff
-    }
-
-    .c20 {
-      height: 42pt
-    }
-
-    .c0 {
-      height: 31pt
-    }
-
-    .title {
-      padding-top: 0pt;
-      color: #000000;
-      font-size: 26pt;
-      padding-bottom: 3pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    .subtitle {
-      padding-top: 0pt;
-      color: #666666;
-      font-size: 15pt;
-      padding-bottom: 16pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    li {
-      color: #000000;
-      font-size: 11pt;
-      font-family: "Arial"
-    }
-
-    p {
-      margin: 0;
-      color: #000000;
-      font-size: 11pt;
-      font-family: "Arial"
-    }
-
-    h1 {
-      padding-top: 20pt;
-      color: #000000;
-      font-size: 20pt;
-      padding-bottom: 6pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    h2 {
-      padding-top: 18pt;
-      color: #000000;
-      font-size: 16pt;
-      padding-bottom: 6pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    h3 {
-      padding-top: 16pt;
-      color: #434343;
-      font-size: 14pt;
-      padding-bottom: 4pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    h4 {
-      padding-top: 14pt;
-      color: #666666;
-      font-size: 12pt;
-      padding-bottom: 4pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    h5 {
-      padding-top: 12pt;
-      color: #666666;
-      font-size: 11pt;
-      padding-bottom: 4pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }
-
-    h6 {
-      padding-top: 12pt;
-      color: #666666;
-      font-size: 11pt;
-      padding-bottom: 4pt;
-      font-family: "Arial";
-      line-height: 1.15;
-      page-break-after: avoid;
-      font-style: italic;
-      orphans: 2;
-      widows: 2;
-      text-align: left
-    }</style>
-    <div class="container">
-      <p class="c12"><span class="c13">ATTESTATION D&rsquo;ACHAT D&rsquo;OBJET DE SECONDE MAIN &Agrave; UN PARTICULIER</span>
-      </p>
-      <hr/>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; Room Group SAS</span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; 22ter Boulevard du G&eacute;n&eacute;ral Leclerc </span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; Neuilly Sur Seine, 92200</span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; RCS Nanterre: 837 528 470</span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; TVA: FR 48 837 528 470</span></p>
-
-      <hr>
-      <p class="c1" ><ng-container *ngIf="fiche['order_number']">Numero de commande {{fiche['order_number']}}</ng-container> <span class="c9"></span></p>
-      <p class="c1"><ng-container *ngIf="fiche['police_number']"> Numero d'ordre {{fiche['police_number']}}</ng-container><span class="c9"></span></p>
-      <p class="c1"><span class="c4"></span></p><a id="t.0d6937c497b1bacbc3c3a67884f7bb83f5c29b08"></a><a id="t.0"></a>
-      <table class="c11">
-        <tbody>
-        <tr class="c20">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">NOM / PR&Eacute;NOM :</span></p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c2"><span class="c4"> {{fiche['prenom']}} {{fiche['nom']}}</span></p></td>
-        </tr>
-        <tr class="c21">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">MOD&Egrave;LE : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Description ) &nbsp; </span>
-          </p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c2"><span class="c4"> {{fiche['modele']}} {{fiche['size']}}</span></p></td>
-        </tr>
-        <tr class="c0">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">PRIX:</span></p></td>
-          <td class="c19" colspan="1" rowspan="1"><p class="c2"><span class="c4">{{fiche['prix']}} euros</span></p></td>
-          <td class="c10" colspan="1" rowspan="1"><p class="c6"><span class="c22">DATE</span><span class="c4">:</span></p>
-          </td>
-          <td class="c5" colspan="1" rowspan="1"><p class="c2"><span class="c4">{{fiche['date']| date:'long'}}</span></p></td>
-        </tr>
-        <tr class="c8">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">MOYEN DE PAIEMENT :</span></p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c14"><span class="c4">{{fiche['payement']}} <br/>
-            {{fiche['mail_paypal'] }} {{fiche['beneficiaire'] }}<br/>
-          {{fiche['iban'] }}</span>
-          </p></td>
-        </tr>
-        <tr class="c8">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">Numero de Carte d'identite</span></p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c14"><span class="c4">{{fiche['id']}} {{fiche['id_type']}} {{fiche['id_nat']}}</span>
-          </p></td>
-        </tr>
-        </tbody>
-      </table>
-      <div *ngIf="fiche['valid']">
-        <p class="c1"><span class="c4"></span></p>
-        <p class="c3"><span class="c4">Je certifie que ce produit est authentique, qu&rsquo;il n&#39;a pas &eacute;t&eacute; vol&eacute;, escroqu&eacute; ou emprunt&eacute;. Je me tiens responsable de l&rsquo;authenticit&eacute;, de la conformit&eacute;, de la provenance et que l&rsquo;objet ne comporte pas de d&eacute;faut.</span>
-        </p>
-        <p class="c3"><span class="c4">Je soussign&eacute; {{fiche['prenom']}} {{fiche['nom']}} atteste sur l&rsquo;honneur la vente de cet objet et la v&eacute;racit&eacute; de cette d&eacute;claration.</span>
-        </p>
-        <p class="c3"><span
-          class="c7">J&#39;ai connaissance des sanctions p&eacute;nales encourues par une fausse attestation. </span><span
-          class="c4">&nbsp; &nbsp;</span></p>
-        <p class="c1"><span class="c4"></span></p>
-        <h5 class="c3"><span class="c17">{{fiche['prenom']}} {{fiche['nom']}}</span></h5>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+    <ng-template #closed>
+      <div class="cross-container" (click)="_opened=true">
+      <i class="fa fa-angle-double-right"></i>
       </div>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c3"><span>.</span></p>
-    </div>
-  </div>
-  <div id="consignment" style="display:none" #consignment>
-    <div class="container">
-      <p class="c12"><span class="c13">ATTESTATION DE DÉPÔT VENTE</span>
-      </p>
-      <hr/>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; Room Group SAS</span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; 22ter Boulevard du G&eacute;n&eacute;ral Leclerc </span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; Neuilly Sur Seine, 92200</span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; RCS Nanterre: 837 528 470</span></p>
-      <p class="c3"><span class="c9">&nbsp; &nbsp; TVA: FR 48 837 528 470</span></p>
 
+      <div class="closed flex">
+        <ul class="closed">
+          <li >     <a style="font-size: 36px;" routerLink="/admin/fiche-list">         <i class="menu-icon fas fa-list-alt"></i></a></li>
+          <li>  <a routerLink="/admin/generator">              <i class="menu-icon fas fa-file-invoice"></i> </a>
+          </li>
+          <li> <a routerLink="/admin/cash-receipt"><i class="menu-icon fas fa-receipt"></i> </a></li>
+<li><br></li>
+          <li>   <a routerLink="/admin/invoices/list" > <i class="menu-icon fas fa-file-alt"></i> </a></li>
+          <li> <a routerLink="/admin/invoices"> <i class="menu-icon fas fa-file-invoice-dollar"></i> </a></li>
 
-      <hr>
-      <p class="c1" ><ng-container *ngIf="fiche['order_number']">Numero de commande {{fiche['order_number']}}</ng-container> <span class="c9"></span></p>
-      <p class="c1"><ng-container *ngIf="fiche['police_number']"> Numero d'ordre {{fiche['police_number']}}</ng-container><span class="c9"></span></p>
-      <p class="c1"><span class="c4"></span></p><a id="t.0d6937c497b1bacbc3c3a67884f7bb83f5c29b08"></a><a id="t.0"></a>
-      <table class="c11">
-        <tbody>
-        <tr class="c20">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">NOM / PR&Eacute;NOM :</span></p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c2"><span class="c4"> {{fiche['prenom']}} {{fiche['nom']}}</span></p></td>
-        </tr>
-        <tr class="c21">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">MOD&Egrave;LE : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Description ) &nbsp; </span>
-          </p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c2"><span class="c4">  {{fiche['modele']}} {{fiche['size']}}</span></p></td>
-        </tr>
-        <tr class="c0">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">PRIX:</span></p></td>
-          <td class="c19" colspan="1" rowspan="1"><p class="c2"><span class="c4">{{fiche['prix']}} euros</span></p></td>
-          <td class="c10" colspan="1" rowspan="1"><p class="c6"><span class="c22">DATE</span><span class="c4">:</span></p>
-          </td>
-          <td class="c5" colspan="1" rowspan="1"><p class="c2"><span class="c4">{{fiche['date'] | date:'long'}}</span></p></td>
-        </tr>
-        <tr class="c8">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">MOYEN DE PAIEMENT :</span></p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c14"><span class="c4">{{fiche['payement']}}<br/> {{fiche['mail_paypal'] }} {{fiche['beneficiaire'] }}<br/>
-          {{fiche['iban'] }}</span>
-          </p></td>
-        </tr>
-        <tr class="c8">
-          <td class="c18" colspan="1" rowspan="1"><p class="c14"><span class="c9">Numero de Carte d'identite</span></p></td>
-          <td class="c15" colspan="3" rowspan="1"><p class="c14"><span class="c4">{{fiche['id']}} {{fiche['id_type']}} {{fiche['id_nat']}} </span>
-          </p></td>
-        </tr>
-        </tbody>
-      </table>
-      <div *ngIf="fiche['valid']">
-        <p class="c1"><span class="c4"></span></p>
-        <p class="c3"><span class="c4">Je certifie que ce produit est authentique, qu&rsquo;il n&#39;a pas &eacute;t&eacute; vol&eacute;, escroqu&eacute; ou emprunt&eacute;. Je me tiens responsable de l&rsquo;authenticit&eacute;, de la conformit&eacute;, de la provenance et que l&rsquo;objet ne comporte pas de d&eacute;faut.</span>
-        </p>
-        <p class="c3"><span class="c4">Je soussign&eacute; {{fiche['prenom']}} {{fiche['nom']}} atteste sur l&rsquo;honneur la vente de cet objet et la v&eacute;racit&eacute; de cette d&eacute;claration.</span>
-        </p>
-        <p class="c3"><span
-          class="c7">J&#39;ai connaissance des sanctions p&eacute;nales encourues par une fausse attestation. </span><span
-          class="c4">&nbsp; &nbsp;</span></p>
-        <p class="c1"><span class="c4"></span></p>
-        <h5 class="c3"><span class="c17">{{fiche['prenom']}} {{fiche['nom']}}</span></h5>
+        </ul>
       </div>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c1"><span class="c4"></span></p>
-      <p class="c3"><span>.</span></p>
+    </ng-template>
+  </ng-sidebar>
+  <!-- Page content -->
+  <div ng-sidebar-content>
+
+    <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+      <!--<a class="navbar-brand" href="#">Coproom</a>-->
+      <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+        <!--<span class="navbar-toggler-icon"></span>-->
+      <!--</button>-->
+      <!--<div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+        <!--<ul class="navbar-nav mr-auto">-->
+          <!--<li class="nav-item active">-->
+            <!--<a class="nav-link" routerLink="/admin/fiche-list">Fiches</a>-->
+          <!--</li>-->
+          <!--<li class="nav-item">-->
+            <!--<a class="nav-link" routerLink="/admin/generator">Generateur</a>-->
+          <!--</li>-->
+          <!--<li class="nav-item">-->
+            <!--<a class="nav-link" routerLink="/admin/invoices">Invoice generator</a>-->
+          <!--</li><li class="nav-item">-->
+          <!--<a class="nav-link" routerLink="/admin/invoices/list">Invoice List</a>-->
+        <!--</li><li class="nav-item">-->
+          <!--<a class="nav-link" routerLink="/admin/cash-receipt">Cash Receipt</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+      <!--</div>-->
+    <!--</nav>-->
+    <div class="content-bg">
+
+      <router-outlet></router-outlet>
+
     </div>
   </div>
 
-
-
+</ng-sidebar-container>
